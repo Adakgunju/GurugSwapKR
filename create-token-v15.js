@@ -79,6 +79,57 @@
 .create-token-note{margin-top:13px;color:#66685f;font-size:8px;line-height:1.55}
 @media(max-width:520px){#create-token{padding:30px 18px 14px}.create-token-card{padding:17px;border-radius:18px}.create-token-head{gap:10px}.create-token-title{font-size:21px}.create-token-grid{grid-template-columns:1fr}.create-token-field.full{grid-column:auto}.create-token-network{font-size:7px}.create-token-button{min-height:46px}}
 /* GurugSwap Create Token visual upgrade */
+/* GurugSwap hero character — visual identity */
+#create-token{position:relative;overflow:hidden}
+#create-token .create-token-shell{position:relative;z-index:1}
+#create-token .create-token-head{position:relative;z-index:3;max-width:760px}
+.gurug-create-hero-art{
+  position:absolute;
+  z-index:0;
+  width:min(430px,38vw);
+  height:430px;
+  right:1.5vw;
+  top:70px;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.gurug-create-hero-art img{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  filter:drop-shadow(0 22px 35px rgba(0,0,0,.48)) drop-shadow(0 0 30px rgba(255,229,0,.20));
+  opacity:.96;
+}
+.gurug-art-glow{
+  position:absolute;
+  width:72%;
+  height:72%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,229,0,.24) 0%,rgba(255,229,0,.08) 34%,transparent 70%);
+  filter:blur(12px);
+}
+.gurug-art-orb{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,229,0,.8);
+  box-shadow:0 0 20px rgba(255,229,0,.65);
+}
+.gurug-art-orb.orb-a{width:8px;height:8px;right:18%;top:15%}
+.gurug-art-orb.orb-b{width:5px;height:5px;left:12%;bottom:18%}
+#create-token .create-token-card,
+#create-token .create-token-help{position:relative;z-index:2}
+@media(max-width:1050px){
+  .gurug-create-hero-art{right:-70px;opacity:.20;width:420px;height:420px}
+}
+@media(max-width:700px){
+  .gurug-create-hero-art{right:-95px;top:105px;width:330px;height:330px;opacity:.12}
+}
+
 /* Mobile readability pass */
 /* Mobile alignment correction */
 #create-token .create-token-head{align-items:flex-start}
@@ -294,6 +345,12 @@
             <h2 class="create-token-title">나만의 <span class="section-title-accent">SPL 토큰.</span></h2>
             <p class="create-token-copy">GurugSwap에서 새로운 SPL 토큰을 직접 생성하세요. 거래에는 지갑이 서명하며 GurugSwap은 개인키를 받지 않습니다.</p>
             <span class="create-token-network">솔라나 메인넷</span>
+          </div>
+          <div class="gurug-create-hero-art" aria-hidden="true">
+            <div class="gurug-art-glow"></div>
+            <img src="https://raw.githubusercontent.com/Adakgunju/Gurug/main/assets/logo/gurug-logo2.png" alt="">
+            <div class="gurug-art-orb orb-a"></div>
+            <div class="gurug-art-orb orb-b"></div>
           </div>
           <div class="create-token-card">
           <div class="create-token-grid">
