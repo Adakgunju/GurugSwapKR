@@ -346,12 +346,6 @@
             <p class="create-token-copy">GurugSwap에서 새로운 SPL 토큰을 직접 생성하세요. 거래에는 지갑이 서명하며 GurugSwap은 개인키를 받지 않습니다.</p>
             <span class="create-token-network">솔라나 메인넷</span>
           </div>
-          <div class="gurug-create-hero-art" aria-hidden="true">
-            <div class="gurug-art-glow"></div>
-            <img src="https://raw.githubusercontent.com/Adakgunju/Gurug/main/assets/logo/gurug-logo2.png" alt="">
-            <div class="gurug-art-orb orb-a"></div>
-            <div class="gurug-art-orb orb-b"></div>
-          </div>
           <div class="create-token-card">
           <div class="create-token-grid">
             <div class="create-token-field">
