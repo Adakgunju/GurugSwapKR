@@ -369,14 +369,14 @@
             </div>
           </div>
 
-          <div class="create-token-note">Your logo and token metadata are stored on permanent Arweave storage through Irys and connected to the mint with Metaplex Token Metadata. GurugSwap does not custody your wallet or private key.</div>
+          <div class="create-token-note">로고와 토큰 메타데이터는 Irys를 통해 영구 저장되며 Metaplex Token Metadata로 민트에 연결됩니다. GurugSwap은 지갑이나 개인키를 보관하지 않습니다.</div>
         </div>
         <aside class="create-token-help">
           <div class="create-token-help-kicker">HOW IT WORKS</div>
           <h3>솔라나 토큰 만드는 방법</h3>
           <div class="create-token-help-step"><div class="create-token-help-num">1</div><div><strong>지갑 연결</strong><span>Phantom을 연결하세요. 지갑과 자산은 계속 본인이 직접 관리합니다.</span></div></div>
           <div class="create-token-help-step"><div class="create-token-help-num">2</div><div><strong>토큰 정보 입력</strong><span>이름, 심볼, 발행량, 소수점을 설정하세요.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">3</div><div><strong>로고 업로드</strong><span>Upload PNG, JPG 또는 WEBP and check the preview before creating.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">3</div><div><strong>로고 업로드</strong><span>PNG, JPG 또는 WEBP 파일을 업로드하고 생성 전에 미리 확인하세요.</span></div></div>
           <div class="create-token-help-step"><div class="create-token-help-num">4</div><div><strong>발행량 관리 설정</strong><span>총 발행량 고정과 동결 권한 해제가 기본으로 활성화됩니다.</span></div></div>
           <div class="create-token-help-step"><div class="create-token-help-num">5</div><div><strong>메타데이터 업로드</strong><span>로고와 메타데이터 JSON은 Irys를 통해 영구 저장됩니다. 저장 비용은 지갑에서 지불합니다.</span></div></div>
           <div class="create-token-help-step"><div class="create-token-help-num">6</div><div><strong>Phantom에서 승인</strong><span>지갑에서 토큰 생성 및 메타데이터 거래에 서명합니다.</span></div></div>
