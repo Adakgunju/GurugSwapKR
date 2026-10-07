@@ -108,6 +108,14 @@
     </div>
   `;
 
+  if (!solanaWeb3) {
+    const missingLabel = document.getElementById("authorityStatusLabel");
+    const missingMessage = document.getElementById("authorityStatusMessage");
+    if (missingLabel) missingLabel.textContent = "Web3 로딩 실패";
+    if (missingMessage) missingMessage.textContent = "솔라나 Web3 라이브러리를 불러오지 못했습니다. 페이지를 새로고침해주세요.";
+    return;
+  }
+
   const mintInput = document.getElementById("authorityMint");
   const checkButton = document.getElementById("authorityCheck");
   const status = document.getElementById("authorityStatus");
