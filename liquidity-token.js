@@ -119,34 +119,34 @@
       <div class="liquidity-grid">
         <div class="liquidity-heading">
           <div class="liquidity-kicker">03 / 유동성 풀</div>
-          <h2 class="liquidity-title">Create a <span class="section-title-accent">Raydium</span> Pool.</h2>
+          <h2 class="liquidity-title"><span class="section-title-accent">Raydium</span> 풀 생성</h2>
           <p class="liquidity-sub">Seed your new Solana token with SOL and create a permissionless CPMM pool.</p>
         </div>
         <div class="liquidity-card">
           <label class="liq-label" for="liqMint">토큰 민트 주소</label>
           <input id="liqMint" class="liq-input" placeholder="Paste your token mint address">
 
-          <label class="liq-label">POOL PAIR</label>
+          <label class="liq-label">풀 페어</label>
           <div class="liq-box">
-            <div class="liq-box-head"><span>PAIR</span><span>CPMM</span></div>
-            <strong>YOUR TOKEN / SOL</strong>
+            <div class="liq-box-head"><span>페어</span><span>CPMM</span></div>
+            <strong>내 토큰 / SOL</strong>
           </div>
 
           <div class="liq-pair">
-            <div><label class="liq-label" for="liqTokenAmount">TOKEN AMOUNT</label><input id="liqTokenAmount" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="0"></div>
-            <div><label class="liq-label" for="liqSolAmount">SOL AMOUNT</label><input id="liqSolAmount" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="0"></div>
+            <div><label class="liq-label" for="liqTokenAmount">토큰 수량</label><input id="liqTokenAmount" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="0"></div>
+            <div><label class="liq-label" for="liqSolAmount">SOL 수량</label><input id="liqSolAmount" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="0"></div>
           </div>
 
           <div class="liq-row">
-            <div><label class="liq-label" for="liqPrice">INITIAL 가격 (SOL)</label><input id="liqPrice" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="Calculated from deposits"></div>
-            <div><label class="liq-label" for="liqFee">FEE TIER</label><select id="liqFee" class="liq-input"><option value="0.25">0.25%</option><option value="0.01">0.01%</option><option value="1">1.00%</option></select></div>
+            <div><label class="liq-label" for="liqPrice">초기 가격 (SOL)</label><input id="liqPrice" class="liq-input" inputmode="decimal" type="number" min="0" step="any" placeholder="Calculated from deposits"></div>
+            <div><label class="liq-label" for="liqFee">수수료 등급</label><select id="liqFee" class="liq-input"><option value="0.25">0.25%</option><option value="0.01">0.01%</option><option value="1">1.00%</option></select></div>
           </div>
 
           <div class="liq-summary">
-            <div><span>POOL TYPE</span><strong>레이디움 CPMM</strong></div>
-            <div><span>INITIAL 가격</span><strong id="liqSummaryPrice">—</strong></div>
+            <div><span>풀 유형</span><strong>레이디움 CPMM</strong></div>
+            <div><span>초기 가격</span><strong id="liqSummaryPrice">—</strong></div>
             <div><span>GURUG스왑 FEE</span><strong>0.10 SOL</strong></div>
-            <div><span>EXISTING POOL</span><strong id="liqExisting">CHECKING…</strong></div>
+            <div><span>기존 풀</span><strong id="liqExisting">확인 중…</strong></div>
           </div>
 
           <button id="liqCreateButton" class="liq-action" type="button">CREATE CPMM POOL</button>
@@ -155,11 +155,11 @@
         </div>
 
         <aside class="liquidity-help">
-          <h3>HOW 유동성 WORKS</h3>
-          <div class="liq-step"><span class="liq-num">1</span><div><strong>SELECT YOUR TOKEN</strong><p>Use the mint address of the SPL token you created in Gurug스왑하고.</p></div></div>
-          <div class="liq-step"><span class="liq-num">2</span><div><strong>SET THE INITIAL 가격</strong><p>Your token amount and SOL amount determine the starting pool price.</p></div></div>
-          <div class="liq-step"><span class="liq-num">3</span><div><strong>SEED THE POOL</strong><p>Both assets are deposited into the Raydium CPMM pool in the same creation transaction.</p></div></div>
-          <div class="liq-step"><span class="liq-num">4</span><div><strong>APPROVE IN PHANTOM</strong><p>You remain in control. GurugSwap never receives your private key or takes custody of your funds.</p></div></div>
+          <h3>유동성 풀 사용 방법</h3>
+          <div class="liq-step"><span class="liq-num">1</span><div><strong>토큰 선택</strong><p>GurugSwap에서 생성한 SPL 토큰의 민트 주소를 입력하세요.</p></div></div>
+          <div class="liq-step"><span class="liq-num">2</span><div><strong>SET THE 초기 가격</strong><p>토큰 수량과 SOL 수량으로 시작 가격이 결정됩니다.</p></div></div>
+          <div class="liq-step"><span class="liq-num">3</span><div><strong>풀에 유동성 공급</strong><p>두 자산이 하나의 생성 거래에서 Raydium CPMM 풀에 함께 예치됩니다.</p></div></div>
+          <div class="liq-step"><span class="liq-num">4</span><div><strong>Phantom에서 승인</strong><p>자산은 계속 본인이 관리합니다. GurugSwap은 개인키를 받거나 자산을 보관하지 않습니다.</p></div></div>
           <div class="liq-note">Raydium currently recommends CPMM for most new permissionless pools. Pool creation also requires SOL for account creation and network/priority costs. <a class="liq-link" href="https://docs.raydium.io/" target="_blank" rel="noopener noreferrer">Raydium docs ↗</a></div>
         </aside>
       </div>
@@ -176,9 +176,9 @@
 
   function decimalToRaw(value, decimals) {
     const text = String(value);
-    if (!/^\\d+(\\.\\d+)?$/.test(text)) throw new Error("Invalid amount.");
+    if (!/^\\d+(\\.\\d+)?$/.test(text)) throw new Error("올바른 수량을 입력해주세요.");
     const [whole, fraction = ""] = text.split(".");
-    if (fraction.length > decimals) throw new Error("Amount has too many decimal places.");
+    if (fraction.length > decimals) throw new Error("수량의 소수점 자릿수가 너무 많습니다.");
     return BigInt(whole) * (10n ** BigInt(decimals)) +
       BigInt((fraction + "0".repeat(decimals)).slice(0, decimals) || "0");
   }
@@ -198,7 +198,7 @@
     const el = document.getElementById("liqExisting");
     if (!el) return;
     if (!mint) { el.textContent = "민트 입력"; return; }
-    el.textContent = "CHECKING…";
+    el.textContent = "확인 중…";
     try {
       const url = 레이디움_API + "/pools/info/list-v2?mint1=" + encodeURIComponent(mint) + "&mint2=" + encodeURIComponent(SOL_MINT) + "&poolType=standard&page=1&pageSize=10";
       const res = await fetch(url, { cache: "no-store" });
@@ -224,7 +224,7 @@
 
   async function getRpcConnection() {
     const Web3 = window.solanaWeb3;
-    if (!Web3?.Connection) throw new Error("Solana web3 library is not available.");
+    if (!Web3?.Connection) throw new Error("Solana Web3 라이브러리를 불러올 수 없습니다.");
     const rpcs = [
       "https://api.mainnet-beta.solana.com",
       "https://solana-rpc.publicnode.com",
@@ -240,7 +240,7 @@
         lastError = e;
       }
     }
-    throw new Error("No Solana RPC endpoint is currently available. " + (lastError?.message || ""));
+    throw new Error("현재 사용할 수 있는 솔라나 RPC가 없습니다. " + (lastError?.message || ""));
   }
 
   async function loadRaydiumSdk() {
@@ -268,7 +268,7 @@
     const account = await connection.getParsedAccountInfo(pubkey, "confirmed");
     const parsed = account?.value?.data?.parsed;
     const info = parsed?.info;
-    if (!info || parsed?.type !== "mint") throw new Error("The token mint could not be read from 토큰을 거래하세요.");
+    if (!info || parsed?.type !== "mint") throw new Error("토큰 민트를 읽을 수 없습니다.");
     return {
       address,
       decimals: Number(info.decimals),
@@ -278,7 +278,7 @@
 
   async function createCpmmPool({ provider, mintAddress, tokenAmount, solAmount, feeTier }) {
     const Web3 = window.solanaWeb3;
-    if (!Web3?.PublicKey) throw new Error("Solana web3 library is not available.");
+    if (!Web3?.PublicKey) throw new Error("Solana Web3 라이브러리를 불러올 수 없습니다.");
 
     const sdk = await loadRaydiumSdk();
     if (!sdk?.Raydium || !sdk?.TxVersion) throw new Error("Raydium browser SDK failed to load.");
@@ -296,7 +296,7 @@
 
     const tokenRaw = decimalToRawExact(tokenAmount, mintA.decimals);
     const solRaw = decimalToRawExact(solAmount, 9);
-    if (tokenRaw <= 0n || solRaw <= 0n) throw new Error("Liquidity amounts must be greater than zero.");
+    if (tokenRaw <= 0n || solRaw <= 0n) throw new Error("유동성 수량은 0보다 커야 합니다.");
 
     // Raydium SDK V2 expects BN amounts for CPMM createPool.
     const bnModule = await import("https://esm.sh/bn.js@5.2.1");
@@ -309,7 +309,7 @@
     // A manual public-RPC balance precheck is intentionally avoided because
     // some public RPCs restrict indexed token-account queries even when the
     // wallet definitely owns the 토큰을 민트하세요.
-    setStatus("Token amount accepted: " + tokenAmount + ". Preparing wallet token account…");
+    setStatus("토큰 수량 확인: " + tokenAmount + ". 지갑 토큰 계정을 준비하는 중…");
 
     setStatus("레이디움 CPMM 설정을 불러오는 중…");
     const raydium = await sdk.Raydium.load({
@@ -335,7 +335,7 @@
     // so seed the SDK account cache from a direct getAccountInfo call.
     // This avoids indexed RPC entirely while still letting Raydium build
     // the normal CPMM transaction.
-    setStatus("Preparing your token account for Raydium…");
+    setStatus("Raydium을 위한 토큰 계정을 준비하는 중…");
     const tokenAtaInfo = await connection.getAccountInfo(
       new Web3.PublicKey(
         Web3.PublicKey.findProgramAddressSync(
@@ -351,7 +351,7 @@
     );
 
     if (!tokenAtaInfo) {
-      throw new Error("Your token's associated token account was not found. Please make sure this wallet owns the tokens and reconnect Phantom.");
+      throw new Error("토큰 계정을 찾을 수 없습니다. 이 지갑이 토큰을 보유하고 있는지 확인하고 Phantom을 다시 연결해주세요.");
     }
 
     // Raydium only needs mint + amount from tokenAccountRawInfos for CPMM
@@ -401,7 +401,7 @@
 
     const feeConfigs = await raydium.api.getCpmmConfigs();
     if (!Array.isArray(feeConfigs) || !feeConfigs.length) {
-      throw new Error("Raydium returned no CPMM fee configurations.");
+      throw new Error("Raydium에서 CPMM 수수료 설정을 가져오지 못했습니다.");
     }
 
     const targetRate = Math.round(feeTier * 10000);
@@ -412,12 +412,12 @@
         .filter(Number.isFinite)
         .map(x => x + "%")
         .join(", ");
-      throw new Error("Selected fee tier is unavailable. Available tiers: " + available);
+      throw new Error("선택한 수수료 등급을 사용할 수 없습니다. 사용 가능한 등급: " + available);
     }
 
     const programId = sdk.CREATE_CPMM_POOL_PROGRAM;
     const poolFeeAccount = sdk.CREATE_CPMM_POOL_FEE_ACC;
-    if (!programId || !poolFeeAccount) throw new Error("Raydium CPMM program configuration is unavailable.");
+    if (!programId || !poolFeeAccount) throw new Error("Raydium CPMM 프로그램 설정을 사용할 수 없습니다.");
 
     const txVersion = sdk.TxVersion.V0;
     const mintAInfo = {
@@ -462,7 +462,7 @@
     } else if (transaction?.add) {
       transaction.add(feeInstruction);
     } else {
-      throw new Error("Could not attach the GurugSwap service fee to the pool transaction.");
+      throw new Error("GurugSwap 서비스 수수료를 풀 거래에 추가하지 못했습니다.");
     }
 
     setStatus("Phantom에서 풀 생성 거래를 승인해주세요…");
@@ -471,7 +471,7 @@
     const poolId = extInfo?.address?.poolId?.toString?.() || extInfo?.address?.poolState?.toString?.() || "";
 
     if (poolId) {
-      setStatus("CPMM pool created. Pool ID: " + poolId);
+      setStatus("CPMM 풀이 생성되었습니다. 풀 ID: " + poolId);
     } else {
       setStatus("CPMM 풀이 성공적으로 생성되었습니다.");
     }
