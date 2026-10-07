@@ -9,7 +9,7 @@
   ];
   const SPL_CDN = "https://esm.sh/@solana/spl-token@0.4.14?bundle";
   const BUFFER_CDN = "https://esm.sh/buffer@6.0.3?bundle";
-  const MAX_RECIPIENTS_PER_TX = 5;
+  const MAX_수령 지갑_PER_TX = 5;
   const GURUG_FEE_WALLET = "ARmME4KE6oe87TokQf7SmYZL6e5Gpz1UCobU3EEqSwEH";
   const GURUG_AIRDROP_FEE_PER_WALLET_LAMPORTS = 1000000; // 0.001 SOL
 
@@ -39,7 +39,7 @@
         }
       } catch {}
     }
-    throw new Error("No Solana RPC endpoint is currently available. Please try again.");
+    throw new Error("현재 사용할 수 있는 솔라나 RPC가 없습니다. 잠시 후 다시 시도해주세요.");
   }
 
   async function loadSpl() {
@@ -142,13 +142,13 @@
     } else if (program === "spl-token-2022") {
       tokenProgram = spl.TOKEN_2022_PROGRAM_ID;
     } else {
-      throw new Error("This mint is not a supported SPL Token or Token-2022 mint.");
+      throw new Error("지원하지 않는 SPL 토큰 또는 Token-2022 민트입니다.");
     }
 
     const info = account.value.data.parsed.info;
     const decimals = Number(info.decimals);
     if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) {
-      throw new Error("Invalid token decimals.");
+      throw new Error("토큰 소수점 설정이 올바르지 않습니다.");
     }
 
     const sourceAta = await spl.getAssociatedTokenAddress(
@@ -159,7 +159,7 @@
       spl.ASSOCIATED_TOKEN_PROGRAM_ID
     );
     const sourceInfo = await connection.getAccountInfo(sourceAta, "confirmed");
-    if (!sourceInfo) throw new Error("Your wallet does not have a token account for this token.");
+    if (!sourceInfo) throw new Error("현재 지갑에 이 토큰의 토큰 계정이 없습니다.");
 
     const balance = await connection.getTokenAccountBalance(sourceAta, "confirmed");
     const rawBalance = BigInt(balance?.value?.amount || "0");
@@ -177,7 +177,7 @@
       try {
         publicKey = new web3.PublicKey(address);
       } catch {
-        throw new Error("Recipient " + (index + 1) + ": invalid Solana wallet address.");
+        throw new Error("수령 지갑 " + (index + 1) + ": 올바르지 않은 솔라나 지갑 주소입니다.");
       }
 
       const key = publicKey.toBase58();
@@ -231,7 +231,7 @@
       // item.amount is already the exact raw token amount (BigInt), prepared in execute에어드롭.
       // Do not call the removed parseAmount() helper here.
       const rawAmount = item.amount;
-      if (rawAmount <= 0n) throw new Error(`Recipient ${item.index + 1}: 수량은 0보다 커야 합니다.`);
+      if (rawAmount <= 0n) throw new Error(`수령 지갑 ${item.index + 1}: 수량은 0보다 커야 합니다.`);
 
       tx.add(spl.createTransferCheckedInstruction(
         sourceAta,
@@ -266,12 +266,12 @@
     host.innerHTML = batchResults.map((batch, batchIndex) => `
       <div class="multi-airdrop-result ${batch.ok ? "success" : "failed"}">
         <div class="multi-airdrop-result-head">
-          <strong>BATCH ${batchIndex + 1} — ${batch.ok ? "CONFIRMED" : "FAILED"}</strong>
-          ${batch.signature ? `<a href="https://solscan.io/tx/${encodeURIComponent(batch.signature)}" target="_blank" rel="noopener noreferrer">VIEW SOLSCAN ↗</a>` : ""}
+          <strong>배치 ${batchIndex + 1} — ${batch.ok ? "완료" : "실패"}</strong>
+          ${batch.signature ? `<a href="https://solscan.io/tx/${encodeURIComponent(batch.signature)}" target="_blank" rel="noopener noreferrer">SOLSCAN 보기 ↗</a>` : ""}
         </div>
         <div class="multi-airdrop-result-recipients">
           ${batch.items.map(item => `
-            <div><span>${escapeHtml(item.address.slice(0, 6) + "…" + item.address.slice(-4))}</span><b>${escapeHtml(formatUiAmount(item.amount, batch.decimals))}</b><em>${batch.ok ? "SENT" : "미전송"}</em></div>
+            <div><span>${escapeHtml(item.address.slice(0, 6) + "…" + item.address.slice(-4))}</span><b>${escapeHtml(formatUiAmount(item.amount, batch.decimals))}</b><em>${batch.ok ? "전송 완료" : "미전송"}</em></div>
           `).join("")}
         </div>
         ${batch.error ? `<p>${escapeHtml(batch.error)}</p>` : ""}
@@ -281,7 +281,7 @@
 
   async function executeAirdrop() {
     const web3 = window.solanaWeb3;
-    if (!web3) throw new Error("Solana Web3 library is not available.");
+    if (!web3) throw new Error("Solana Web3 라이브러리를 불러올 수 없습니다.");
 
     const provider = getProvider();
     if (!provider?.publicKey) {
@@ -322,14 +322,14 @@
     }
 
     const batches = [];
-    for (let i = 0; i < validated.length; i += MAX_RECIPIENTS_PER_TX) {
-      batches.push(validated.slice(i, i + MAX_RECIPIENTS_PER_TX));
+    for (let i = 0; i < validated.length; i += MAX_수령 지갑_PER_TX) {
+      batches.push(validated.slice(i, i + MAX_수령 지갑_PER_TX));
     }
 
     updateSummary(batches.length, mintInfo.decimals);
     const totalEl = document.getElementById("multiAirdropTotal");
     if (totalEl) totalEl.textContent = totalUiAmount;
-    setStatus(`Ready: ${validated.length} recipient(s) × ${uiAmount} tokens = ${totalUiAmount} total in ${batches.length} transaction(s).`, "active");
+    setStatus(`준비 완료: ${validated.length}개 지갑 × ${uiAmount} 토큰 = 총 ${totalUiAmount} 토큰, ${batches.length}개 트랜잭션입니다.`, "active");
 
     // GurugSwap service fee is shown separately. Solana network fees are handled by Phantom.
     const feeLamports = validated.length * GURUG_AIRDROP_FEE_PER_WALLET_LAMPORTS;
@@ -339,7 +339,7 @@
     const results = [];
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
-      setStatus(`배치 준비 중 ${i + 1} of ${batches.length} — ${batch.length} wallet(s) × ${uiAmount} GURUG...`, "active");
+      setStatus(`배치 준비 중 ${i + 1} / ${batches.length} — ${batch.length}개 지갑 × ${uiAmount} GURUG...`, "active");
 
       try {
         const built = await buildBatch(
@@ -354,14 +354,14 @@
           i === 0 ? validated.length * GURUG_AIRDROP_FEE_PER_WALLET_LAMPORTS : 0
         );
 
-        setStatus(`Approve batch ${i + 1} of ${batches.length} in Phantom: ${batch.length} wallet(s) × ${uiAmount} GURUG.`, "active");
+        setStatus(`Phantom에서 ${i + 1} / ${batches.length}번 배치를 승인해주세요: ${batch.length}개 지갑 × ${uiAmount} GURUG.`, "active");
         const signed = await provider.signTransaction(built.tx);
         const signature = await connection.sendRawTransaction(signed.serialize(), {
           skipPreflight: false,
           maxRetries: 3
         });
 
-        setStatus(`배치 확인 중 ${i + 1} of ${batches.length}...`, "active");
+        setStatus(`배치 확인 중 ${i + 1} / ${batches.length}...`, "active");
         await connection.confirmTransaction(signature, "confirmed");
 
         results.push({ ok: true, signature, items: batch, decimals: mintInfo.decimals });
@@ -373,19 +373,19 @@
           signature: "",
           items: batch,
           decimals: mintInfo.decimals,
-          error: error?.message || "Transaction failed or was cancelled."
+          error: error?.message || "트랜잭션이 실패했거나 취소되었습니다."
         });
         await showResults(results);
 
         setStatus(
-          `Batch ${i + 1} failed. Later batches were not sent. Fix the issue and run the airdrop again.`,
+          `${i + 1}번 배치가 실패했습니다. 이후 배치는 전송되지 않았습니다. 문제를 해결한 후 다시 실행해주세요.`,
           "error"
         );
         return results;
       }
     }
 
-    setStatus(`멀티 에어드롭 완료 — ${validated.length} recipient(s) received ${uiAmount} GURUG each on 토큰을 거래하세요.`, "success");
+    setStatus(`멀티 에어드롭 완료 — ${validated.length}개 지갑에 각각 ${uiAmount} GURUG을 전송했습니다.`, "success");
     return results;
   }
 
@@ -414,7 +414,7 @@
 
     recipientAddresses = addresses;
     renderRecipients();
-    setStatus(`Loaded ${addresses.length} wallet address(es). Enter the common token amount, then send.`, "active");
+    setStatus(`${addresses.length}개의 지갑 주소를 불러왔습니다. 지갑당 전송할 토큰 수량을 입력한 후 전송하세요.`, "active");
   }
 
   function addStyles() {
@@ -556,48 +556,48 @@
       <div class="multi-airdrop-shell">
         <div class="multi-airdrop-card">
           <label class="multi-airdrop-label" for="multiAirdropMint">토큰 민트 주소</label>
-          <input id="multiAirdropMint" class="multi-airdrop-input" type="text" placeholder="Paste the Solana token mint address" autocomplete="off" spellcheck="false">
+          <input id="multiAirdropMint" class="multi-airdrop-input" type="text" placeholder="솔라나 토큰 민트 주소를 입력하세요" autocomplete="off" spellcheck="false">
 
           <div class="multi-airdrop-controls">
-            <button id="multiAirdropUseCreated" class="multi-airdrop-secondary" type="button" hidden>USE NEW TOKEN</button>
-            <button id="multiAirdropClear" class="multi-airdrop-secondary" type="button">CLEAR ADDRESSES</button>
+            <button id="multiAirdropUseCreated" class="multi-airdrop-secondary" type="button" hidden>새 토큰 사용</button>
+            <button id="multiAirdropClear" class="multi-airdrop-secondary" type="button">주소 지우기</button>
           </div>
 
-          <label class="multi-airdrop-label" for="multiAirdropAddresses" style="margin-top:24px">RECIPIENT WALLET ADDRESSES</label>
+          <label class="multi-airdrop-label" for="multiAirdropAddresses" style="margin-top:24px">수령 지갑 주소</label>
           <div class="multi-airdrop-address-editor">
             <div id="multiAirdropLineNumbers" class="multi-airdrop-line-numbers" aria-hidden="true">1</div>
-            <textarea id="multiAirdropAddresses" class="multi-airdrop-addresses" placeholder="Paste wallet addresses here — one address per line.\n\nYou can paste hundreds or thousands of addresses at once." spellcheck="false"></textarea>
+            <textarea id="multiAirdropAddresses" class="multi-airdrop-addresses" placeholder="지갑 주소를 붙여넣으세요 — 한 줄에 하나씩 입력하세요.\n\n수백 개 또는 수천 개의 주소를 한 번에 입력할 수 있습니다." spellcheck="false"></textarea>
           </div>
-          <div class="multi-airdrop-hint">One wallet address per line. Commas and spaces are also accepted. The same amount will be sent to every wallet.</div>
+          <div class="multi-airdrop-hint">지갑 주소는 한 줄에 하나씩 입력하세요. 쉼표와 공백으로 구분해도 됩니다. 모든 지갑에 동일한 수량이 전송됩니다.</div>
 
           <div class="multi-airdrop-amount-row">
             <div class="multi-airdrop-amount-wrap">
-              <label class="multi-airdrop-label" for="multiAirdropAmount">AMOUNT PER WALLET (TOKEN)</label>
+              <label class="multi-airdrop-label" for="multiAirdropAmount">지갑당 전송 수량 (TOKEN)</label>
               <input id="multiAirdropAmount" class="multi-airdrop-amount" type="text" inputmode="decimal" placeholder="e.g. 0.01" autocomplete="off">
-              <div class="multi-airdrop-hint">Enter the actual token quantity per wallet. This is never a percentage of total supply.</div>
+              <div class="multi-airdrop-hint">지갑마다 실제로 전송할 토큰 수량을 입력하세요. 총 발행량의 비율로 계산되지 않습니다.</div>
             </div>
           </div>
 
           <div class="multi-airdrop-summary">
-            <div class="multi-airdrop-stat"><span>RECIPIENTS</span><strong id="multiAirdropCount">0</strong></div>
-            <div class="multi-airdrop-stat"><span>TOTAL TOKENS</span><strong id="multiAirdropTotal">0</strong></div>
-            <div class="multi-airdrop-stat"><span>TRANSACTIONS</span><strong id="multiAirdropTxCount">—</strong></div>
+            <div class="multi-airdrop-stat"><span>수령 지갑</span><strong id="multiAirdropCount">0</strong></div>
+            <div class="multi-airdrop-stat"><span>총 토큰 수량</span><strong id="multiAirdropTotal">0</strong></div>
+            <div class="multi-airdrop-stat"><span>트랜잭션</span><strong id="multiAirdropTxCount">—</strong></div>
           </div>
-          <div class="multi-airdrop-stat" style="margin-top:8px"><span>GURUGURUG FEE</span><strong id="multiAirdropCost">0 SOL</strong></div>
-          <div class="multi-airdrop-hint" style="margin-top:8px">Solana network transaction fees are separate and paid through your wallet.</div>
+          <div class="multi-airdrop-stat" style="margin-top:8px"><span>GURUG FEE</span><strong id="multiAirdropCost">0 SOL</strong></div>
+          <div class="multi-airdrop-hint" style="margin-top:8px">솔라나 네트워크 수수료는 별도이며 연결된 지갑에서 지불됩니다.</div>
 
-          <button id="multiAirdropSend" class="multi-airdrop-action" type="button">SEND 멀티 에어드롭</button>
-          <div id="multiAirdropStatus" class="multi-airdrop-status">Paste your token mint, wallet addresses and one amount per wallet.</div>
+          <button id="multiAirdropSend" class="multi-airdrop-action" type="button">멀티 에어드롭 전송</button>
+          <div id="multiAirdropStatus" class="multi-airdrop-status">토큰 민트 주소, 수령 지갑 주소, 지갑당 전송 수량을 입력해주세요.</div>
           <div id="multiAirdropResults" class="multi-airdrop-results"></div>
         </div>
 
         <aside class="multi-airdrop-help">
-          <h3>HOW IT WORKS</h3>
-          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">1</div><div><strong>Select your token</strong><span>Paste the SPL Token or Token-2022 mint address you want to distribute.</span></div></div>
-          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">2</div><div><strong>Paste wallet addresses</strong><span>Paste hundreds or thousands of Solana wallet addresses at once. One address per line is easiest.</span></div></div>
-          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">3</div><div><strong>Set one amount</strong><span>Enter the token amount once. Every wallet receives the same amount.</span></div></div>
-          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">4</div><div><strong>Approve batches in Phantom</strong><span>GurugSwap automatically splits the list into practical Solana transactions and asks Phantom to approve each batch.</span></div></div>
-          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">5</div><div><strong>Track every batch</strong><span>Each confirmed batch gets a direct Solscan transaction link.</span></div></div>
+          <h3>사용 방법</h3>
+          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">1</div><div><strong>토큰 선택</strong><span>배포하려는 SPL Token 또는 Token-2022 민트 주소를 입력하세요.</span></div></div>
+          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">2</div><div><strong>지갑 주소 입력</strong><span>수백 개 또는 수천 개의 솔라나 지갑 주소를 한 번에 입력할 수 있습니다. 한 줄에 하나씩 입력하는 것이 가장 편합니다.</span></div></div>
+          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">3</div><div><strong>전송 수량 설정</strong><span>토큰 수량을 한 번만 입력하세요. 모든 지갑에 동일한 수량이 전송됩니다.</span></div></div>
+          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">4</div><div><strong>Phantom에서 배치 승인</strong><span>GurugSwap이 주소 목록을 여러 개의 적절한 솔라나 트랜잭션으로 나누고, 각 배치를 Phantom에서 승인하도록 요청합니다.</span></div></div>
+          <div class="multi-airdrop-help-step"><div class="multi-airdrop-help-num">5</div><div><strong>배치별 전송 확인</strong><span>확인된 각 배치에는 Solscan 트랜잭션 링크가 제공됩니다.</span></div></div>
         </aside>
       </div>
     `;
@@ -663,7 +663,7 @@
       input.value = mint;
       button.dataset.mint = mint;
       button.hidden = false;
-      setStatus("New token detected. The mint address is ready for your multi airdrop.", "active");
+      setStatus("새 토큰을 확인했습니다. 민트 주소가 멀티 에어드롭에 입력되었습니다.", "active");
     });
   }
 
