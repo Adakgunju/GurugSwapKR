@@ -1,6 +1,11 @@
 (() => {
   const app = document.getElementById("tokenAuthorityApp");
-  if (!app || typeof solanaWeb3 === "undefined") return;
+  if (!app) return;
+  const solanaWeb3 = window.solanaWeb3;
+  if (!solanaWeb3) {
+    app.innerHTML = `<div class="token-authority-card"><div class="token-authority-head"><span>권한 관리</span><span class="token-authority-live">솔라나 메인넷</span></div><div class="token-authority-status error"><div class="token-authority-status-top"><span class="token-authority-dot"></span><span>Web3 로딩 실패</span></div><div>솔라나 Web3 라이브러리를 불러오지 못했습니다. 페이지를 새로고침해주세요.</div></div></div>`;
+    return;
+  }
 
   const RPCS = [
     "https://api.mainnet-beta.solana.com",
