@@ -318,7 +318,7 @@
       mintState = await readMint(new solanaWeb3.PublicKey(mint).toString());
       updateAllRows();
       const programName = mintState.programId === TOKEN_2022_PROGRAM ? "Token-2022" : "SPL Token";
-      setStatus("권한 조회 완료", programName + " mint checked successfully. 현재 권한을 아래에서 확인할 수 있습니다.", "success");
+      setStatus("권한 조회 완료", programName + " 민트의 권한을 확인했습니다. 현재 권한을 아래에서 확인할 수 있습니다.", "success");
     } catch (error) {
       mintState = null;
       updateAllRows();
@@ -343,7 +343,7 @@
       modalConfirmButton.dataset.mode = "revoke";
     } else {
       modalTitle.textContent = label + " 변경";
-      modalMessage.textContent = "현재 권한 " + short(current) + "을(를) " + short(newAuthority) + "(으)로 변경하시겠습니까?";
+      modalMessage.textContent = "현재 권한 " + short(current) + "을(를) " + short(newAuthority) + " 주소로 변경하시겠습니까?";
       modalConfirmWrap.hidden = true;
       modalConfirmButton.className = "";
       modalConfirmButton.textContent = "권한 변경";
