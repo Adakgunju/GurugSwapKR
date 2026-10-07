@@ -15,7 +15,7 @@
   app.innerHTML = `
     <div class="token-burn-card">
       <div class="token-burn-head">
-        <span>BURN SPL TOKENS</span>
+        <span>SPL 토큰 소각</span>
         <span class="token-burn-live">솔라나 메인넷</span>
       </div>
       <div class="token-burn-fields">
@@ -35,7 +35,7 @@
         <div id="burnStatusMessage">Burned tokens are permanently removed from the selected wallet and token supply.</div>
         <a id="burnTxLink" href="#" target="_blank" rel="noopener noreferrer" hidden>거래 내역 보기 ↗</a>
       </div>
-      <div class="token-burn-foot"><span>비수탁형</span><span>NETWORK FEES SEPARATE</span><span>PERMANENT</span></div>
+      <div class="token-burn-foot"><span>비수탁형</span><span>네트워크 수수료 별도</span><span>영구 소각</span></div>
     </div>
   `;
 
@@ -140,12 +140,12 @@
 
   function decimalToRaw(value, decimals) {
     const text = String(value || "").trim();
-    if (!/^\d+(?:\.\d+)?$/.test(text)) throw new Error("Enter a valid burn amount.");
+    if (!/^\d+(?:\.\d+)?$/.test(text)) throw new Error("올바른 소각 수량을 입력해주세요.");
     const [whole, fraction = ""] = text.split(".");
-    if (fraction.length > decimals) throw new Error("Amount has more decimal places than this token supports.");
+    if (fraction.length > decimals) throw new Error("수량의 소수점 자릿수가 토큰 설정을 초과했습니다.");
     const rawText = whole + fraction.padEnd(decimals, "0");
     const raw = BigInt(rawText || "0");
-    if (raw <= 0n) throw new Error("소각할 amount must be greater than 0.");
+    if (raw <= 0n) throw new Error("소각 수량은 0보다 커야 합니다.");
     return raw;
   }
 
@@ -294,14 +294,14 @@
     selectedBalance = null;
 
     if (!isMint(mint)) {
-      balanceEl.textContent = "Enter a valid token mint address.";
+      balanceEl.textContent = "올바른 토큰 민트 주소를 입력해주세요.";
       return;
     }
 
     if (!provider()?.publicKey) {
       maxButton.disabled = true;
       updateBurnButtonState();
-      balanceEl.textContent = "Connect your wallet using the top-right button.";
+      balanceEl.textContent = "우측 상단 버튼에서 지갑을 연결해주세요.";
       setStatus("지갑 연결 필요", "먼저 GurugSwap 우측 상단에서 지갑을 연결해주세요.", "error");
       return;
     }
@@ -314,7 +314,7 @@
         maxButton.disabled = true;
         updateBurnButtonState();
         balanceEl.textContent = "이 지갑에서 토큰 계정을 찾지 못했습니다.";
-        setStatus("소각 준비 완료", "No token account was found for this mint.");
+        setStatus("소각 준비 완료", "이 민트의 토큰 계정을 찾지 못했습니다.");
         return;
       }
 
@@ -331,8 +331,8 @@
     } catch (err) {
       maxButton.disabled = true;
       updateBurnButtonState();
-      balanceEl.textContent = "BALANCE 확인 실패";
-      setStatus("ERROR", err.message || "Could not read your token account.", "error");
+      balanceEl.textContent = "잔액 확인 실패";
+      setStatus("오류", err.message || "토큰 계정을 읽을 수 없습니다.", "error");
     }
   }
 
@@ -354,7 +354,7 @@
       if (!selectedAccount) throw new Error("이 지갑에서 토큰 계정을 찾지 못했습니다.");
 
       const rawAmount = decimalToRaw(amountInput.value, selectedDecimals);
-      if (rawAmount > selectedBalance) throw new Error("소각할 amount exceeds your wallet balance.");
+      if (rawAmount > selectedBalance) throw new Error("소각 수량이 지갑 잔액을 초과합니다.");
 
       const owner = p.publicKey.toString();
       const transaction = new solanaWeb3.Transaction();
@@ -383,7 +383,7 @@
         maxRetries:3
       });
 
-      setStatus("CONFIRMING", "Checking the burn transaction on Solana…", "active");
+      setStatus("확인 중", "솔라나에서 소각 거래를 확인하는 중…", "active");
 
       // Do not rely only on confirmTransaction(blockhash), because a transaction
       // can land on-chain while the client-side blockhash confirmation window
@@ -498,7 +498,7 @@
     try {
       const raw = decimalToRaw(amountInput.value, selectedDecimals);
       if (raw > selectedBalance) {
-        setStatus("수량 초과", "소각할 amount exceeds your wallet balance.", "error");
+        setStatus("수량 초과", "소각 수량이 지갑 잔액을 초과합니다.", "error");
       } else {
         setStatus("소각 준비 완료", "수량을 신중하게 확인해주세요. 소각은 되돌릴 수 없습니다.");
       }
@@ -532,7 +532,7 @@
       selectedBalance = null;
       maxButton.disabled = true;
       button.disabled = true;
-      balanceEl.textContent = "Connect your wallet using the top-right button.";
+      balanceEl.textContent = "우측 상단 버튼에서 지갑을 연결해주세요.";
       setStatus("지갑 연결 필요", "먼저 GurugSwap 우측 상단에서 지갑을 연결해주세요.", "error");
     });
   }
