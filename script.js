@@ -290,7 +290,7 @@ async function rpcRequest(rpcUrl, method, params) {
     if (!res.ok) throw new Error("RPC HTTP " + res.status);
 
     const json = await res.json();
-    if (json?.error) throw new Error(json.error.message || "RPC error");
+    if (json?.error) throw new Error(json.error.message || "RPC 오류");
     return json.result;
   } finally {
     clearTimeout(timeout);
@@ -303,7 +303,7 @@ async function getJupiterHoldingBalance(owner, token) {
     cache: "no-store"
   });
 
-  if (!res.ok) throw new Error("Jupiter holdings HTTP " + res.status);
+  if (!res.ok) throw new Error("Jupiter 자산 조회 HTTP " + res.status);
 
   const data = await res.json();
 
@@ -358,7 +358,7 @@ async function getOwnerTokenAccount(token) {
     "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
   ];
 
-  // Query by mint directly instead of scanning every token account.
+  // Query by mint directly instead of scanning every 토큰 계정.
   // This is more reliable for wallets with many SPL holdings and avoids
   // RPC providers returning incomplete owner-account scans.
   for (const rpcUrl of BALANCE_RPCS) {
@@ -531,11 +531,11 @@ async function refreshWalletBalances(fromSnapshot = fromToken, toSnapshot = toTo
     walletSolBalance = null;
     if (fromBalanceEl) {
       fromBalanceEl.hidden = false;
-      fromBalanceEl.textContent = "BALANCE —";
+      fromBalanceEl.textContent = "잔액 —";
     }
     if (toBalanceEl) {
       toBalanceEl.hidden = false;
-      toBalanceEl.textContent = "BALANCE —";
+      toBalanceEl.textContent = "잔액 —";
     }
     updateSwapButtonState();
     return;
@@ -589,7 +589,7 @@ function formatBalance(value, decimals = 6) {
 function setBalanceMessage(el, token, amount) {
   if (!el) return;
   el.hidden = false;
-  el.textContent = "BALANCE " + formatBalance(amount, token.decimals ?? 6);
+  el.textContent = "잔액 " + formatBalance(amount, token.decimals ?? 6);
 }
 
 const SOL_MAX_RESERVE = 0.005;
@@ -613,7 +613,7 @@ function applyMaxAmount() {
   }
 
   if (maxAmount <= 0) {
-    setSwapStatus("Not enough " + fromToken.symbol + " balance to swap.", true);
+    setSwapStatus("잔액 부족: " + fromToken.symbol + " balance to swap.", true);
     return;
   }
 
@@ -750,11 +750,11 @@ function updateTokenButtons() {
   refreshBalancesSoon();
   updateSwapButtonState();
 }
-const TOKEN_RECENTS_KEY = "gurug스왑하고.recentTokens";
+const TOKEN_최근 사용S_KEY = "gurug스왑하고.recentTokens";
 
 function getRecentTokenMints() {
   try {
-    const data = JSON.parse(localStorage.getItem(TOKEN_RECENTS_KEY) || "[]");
+    const data = JSON.parse(localStorage.getItem(TOKEN_최근 사용S_KEY) || "[]");
     return Array.isArray(data) ? data.filter(isLikelyMint).slice(0, 6) : [];
   } catch {
     return [];
@@ -765,7 +765,7 @@ function rememberToken(token) {
   if (!token?.mint) return;
   try {
     const next = [token.mint, ...getRecentTokenMints().filter(mint => mint !== token.mint)].slice(0, 6);
-    localStorage.setItem(TOKEN_RECENTS_KEY, JSON.stringify(next));
+    localStorage.setItem(TOKEN_최근 사용S_KEY, JSON.stringify(next));
   } catch {}
 }
 
@@ -892,7 +892,7 @@ async function renderTokenList(query = "") {
       ? '<span class="token-verified" title="검증된 토큰">✓</span>'
       : "";
     const recent = !q && recentMints.includes(token.mint)
-      ? '<span class="token-recent">RECENT</span>'
+      ? '<span class="token-recent">최근 사용</span>'
       : "";
     const side = token.mint === fromToken.mint
       ? "FROM"
@@ -1001,7 +1001,7 @@ function setSwapStatus(message, error = false, state = "") {
   if (label) {
     label.textContent = error ? "스왑 실패"
       : state === "success" ? "스왑 성공"
-      : state === "active" ? "PROCESSING"
+      : state === "active" ? "처리 중"
       : "스왑 준비 완료";
   }
   if (messageEl) messageEl.textContent = message;
@@ -1129,8 +1129,8 @@ if (solAmountInput) {
       const messageEl = document.getElementById("swapStatusMessage");
       const progress = document.getElementById("swapProgressFill");
       const txLink = document.getElementById("swapTxLink");
-      if (label) label.textContent = "PROCESSING";
-      if (messageEl) messageEl.textContent = "Getting a new live Raydium quote...";
+      if (label) label.textContent = "처리 중";
+      if (messageEl) messageEl.textContent = "새 Raydium 실시간 견적을 불러오는 중...";
       if (progress) progress.style.width = "35%";
       if (txLink) {
         txLink.hidden = true;
@@ -1173,7 +1173,7 @@ async function executeGurugSwap() {
   try {
     if (!lastSwapResponse) {
       await getQuote();
-      if (!lastSwapResponse) throw new Error("No valid quote");
+      if (!lastSwapResponse) throw new Error("유효한 견적이 없습니다.");
     }
 
     const feeRes = await fetch(레이디움_BASE_API + "/main/auto-fee");
@@ -1191,7 +1191,7 @@ async function executeGurugSwap() {
       : await getOwnerTokenAccount(toToken);
 
     if (fromToken.symbol !== "SOL" && !inputAccount) {
-      throw new Error("Could not find your " + fromToken.symbol + " token account.");
+      throw new Error("현재 지갑에서 찾을 수 없습니다: " + fromToken.symbol + " 토큰 계정.");
     }
 
     const txRes = await fetch(레이디움_API + "/transaction/swap-base-in", {
@@ -1211,7 +1211,7 @@ async function executeGurugSwap() {
 
     const txJson = await txRes.json();
     if (!txRes.ok || !txJson.success || !txJson.data?.length) {
-      throw new Error(txJson.msg || "Transaction build failed");
+      throw new Error(txJson.msg || "거래 생성에 실패했습니다.");
     }
 
     const transactions = txJson.data.map(item =>
