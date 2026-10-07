@@ -22,10 +22,10 @@
         }
       } catch {}
     }
-    throw new Error("No Solana RPC endpoint is currently available. Please try again.");
+    throw new Error("현재 사용할 수 있는 솔라나 RPC가 없습니다. 잠시 후 다시 시도해주세요.");
   }
   const SPL_TOKEN_CDN = "https://esm.sh/@solana/spl-token@0.4.14?bundle";
-  const MAX_RECIPIENTS_PER_TX = 6;
+  const MAX_수령 지갑_PER_TX = 6;
 
   let splModulesPromise = null;
 
@@ -75,18 +75,18 @@
   }
 
   function addSection() {
-    if (document.getElementById("distributeTokens")) return;
+    if (document.getElementById("distribute토큰을")) return;
     const swap = document.getElementById("swap");
     const swapIntro = document.querySelector(".swap-intro");
     if (!swap) return;
 
     const section = document.createElement("section");
-    section.id = "distributeTokens";
+    section.id = "distribute토큰을";
     section.className = "distribute-section";
     section.innerHTML = `
       <div class="distribute-wrap">
         <div class="distribute-kicker">02 / 토큰 배포</div>
-        <h2 class="distribute-title">Send <span class="section-title-accent">Tokens</span> to any wallet.</h2>
+        <h2 class="distribute-title"><span class="section-title-accent">토큰을</span> 지갑으로 전송하세요.</h2>
         <p class="distribute-lead">Distribute your SPL tokens directly from your wallet. Add recipient wallets, review the batch, then approve the transfers in Phantom.</p>
 
         <div class="distribute-grid">
@@ -98,16 +98,16 @@
             </div>
 
             <div class="distribute-recipient-head">
-              <span class="distribute-label" style="margin:0">RECIPIENTS</span>
+              <span class="distribute-label" style="margin:0">수령 지갑</span>
               <button id="distributeAdd" class="distribute-add" type="button">+ ADD RECIPIENT</button>
             </div>
             <div id="distributeRows"></div>
 
             <div class="distribute-summary">
-              <div class="distribute-stat"><span>RECIPIENTS</span><strong id="distributeCount">1</strong></div>
-              <div class="distribute-stat"><span>TOTAL TOKENS</span><strong id="distributeTotal">0</strong></div>
-              <div class="distribute-stat"><span>TRANSACTIONS</span><strong id="distributeTxCount">—</strong></div>
-              <div class="distribute-stat"><span>NETWORK COST</span><strong id="distributeCost">CALCULATED AT SIGNING</strong></div>
+              <div class="distribute-stat"><span>수령 지갑</span><strong id="distributeCount">1</strong></div>
+              <div class="distribute-stat"><span>총 토큰 수량</span><strong id="distributeTotal">0</strong></div>
+              <div class="distribute-stat"><span>트랜잭션</span><strong id="distributeTxCount">—</strong></div>
+              <div class="distribute-stat"><span>네트워크 수수료</span><strong id="distributeCost">서명 시 계산</strong></div>
             </div>
 
             <button id="distributeSend" class="distribute-action" type="button">DISTRIBUTE TOKENS</button>
@@ -116,12 +116,12 @@
           </div>
 
           <aside class="distribute-help">
-            <h3>HOW IT WORKS</h3>
-            <div class="distribute-help-step"><div class="distribute-help-num">1</div><div><strong>Select your token</strong><span>Paste the mint address of the SPL token you want to distribute.</span></div></div>
-            <div class="distribute-help-step"><div class="distribute-help-num">2</div><div><strong>Add recipients</strong><span>Enter a Solana wallet address and the amount for each recipient.</span></div></div>
-            <div class="distribute-help-step"><div class="distribute-help-num">3</div><div><strong>Review the batch</strong><span>GurugSwap validates addresses, token decimals and your total distribution.</span></div></div>
-            <div class="distribute-help-step"><div class="distribute-help-num">4</div><div><strong>Approve in Phantom</strong><span>Transfers are sent directly from your wallet. GurugSwap never takes custody.</span></div></div>
-            <div class="distribute-help-step"><div class="distribute-help-num">5</div><div><strong>Track each transaction</strong><span>Every batch gets a direct Solscan transaction link after confirmation.</span></div></div>
+            <h3>사용 방법</h3>
+            <div class="distribute-help-step"><div class="distribute-help-num">1</div><div><strong>토큰 선택</strong><span>배포하려는 SPL 토큰의 민트 주소를 입력하세요.</span></div></div>
+            <div class="distribute-help-step"><div class="distribute-help-num">2</div><div><strong>수령 지갑 추가</strong><span>솔라나 지갑 주소와 각 지갑에 보낼 수량을 입력하세요.</span></div></div>
+            <div class="distribute-help-step"><div class="distribute-help-num">3</div><div><strong>전송 내용 확인</strong><span>GurugSwap이 주소, 토큰 소수점 및 전체 배포 수량을 확인합니다.</span></div></div>
+            <div class="distribute-help-step"><div class="distribute-help-num">4</div><div><strong>Phantom에서 승인</strong><span>토큰은 지갑에서 직접 전송됩니다. GurugSwap은 자산을 보관하지 않습니다.</span></div></div>
+            <div class="distribute-help-step"><div class="distribute-help-num">5</div><div><strong>거래별 확인</strong><span>확인된 각 전송에는 Solscan 거래 링크가 제공됩니다.</span></div></div>
             <div class="distribute-note">Transfers are batched into several transactions when needed to keep each Solana transaction within a practical size limit.</div>
           </aside>
         </div>
@@ -147,7 +147,7 @@
     row.className = "distribute-row";
     row.innerHTML = `
       <input class="distribute-address" type="text" placeholder="수령 지갑 주소" value="${escapeHtml(address)}" autocomplete="off" spellcheck="false">
-      <input class="distribute-amount" type="number" min="0" step="any" placeholder="Amount" value="${escapeHtml(amount)}" inputmode="decimal">
+      <input class="distribute-amount" type="number" min="0" step="any" placeholder="수량" value="${escapeHtml(amount)}" inputmode="decimal">
       <button class="distribute-remove" type="button" aria-label="수령자 삭제">×</button>
     `;
     row.querySelector(".distribute-remove").addEventListener("click", () => {
@@ -202,11 +202,11 @@
     return null;
   }
 
-  function parseUiAmount(value, decimals) {
+  function parseUi수량(value, decimals) {
     const raw = String(value || "").trim().replace(/,/g, "");
     if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error("올바른 토큰 수량을 입력해주세요.");
     const [whole, fraction = ""] = raw.split(".");
-    if (fraction.length > decimals) throw new Error("One recipient amount has more decimal places than the token supports.");
+    if (fraction.length > decimals) throw new Error("입력한 수량의 소수점 자릿수가 토큰 설정을 초과했습니다.");
     const padded = (fraction + "0".repeat(decimals)).slice(0, decimals);
     return BigInt(whole) * (10n ** BigInt(decimals)) + BigInt(padded || "0");
   }
@@ -215,13 +215,13 @@
     const info = await connection.getParsedAccountInfo(mint, "confirmed");
     if (!info?.value?.data?.parsed?.info) throw new Error("토큰 민트를 읽을 수 없습니다.");
     const parsed = info.value.data.parsed.info;
-    if (String(info.value.data.program || "") !== "spl-token") throw new Error("This mint is not a standard SPL Token mint supported by this distributor.");
+    if (String(info.value.data.program || "") !== "spl-token") throw new Error("이 민트는 현재 배포 기능에서 지원하는 표준 SPL 토큰이 아닙니다.");
     const decimals = Number(parsed.decimals);
-    if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) throw new Error("Invalid token decimals.");
+    if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) throw new Error("토큰 소수점 설정이 올바르지 않습니다.");
     const {getAssociatedTokenAddress} = await loadSplModules();
     const sourceAta = await getAssociatedTokenAddress(mint, publicKey);
     const sourceInfo = await connection.getAccountInfo(sourceAta, "confirmed");
-    if (!sourceInfo) throw new Error("Your wallet does not have an associated token account for this token.");
+    if (!sourceInfo) throw new Error("현재 지갑에 이 토큰의 계정이 없습니다.");
     return {decimals, sourceAta, supply: parsed.supply};
   }
 
@@ -231,8 +231,8 @@
     const owner = provider.publicKey;
     const transactions = [];
 
-    for (let start = 0; start < rows.length; start += MAX_RECIPIENTS_PER_TX) {
-      const batch = rows.slice(start, start + MAX_RECIPIENTS_PER_TX);
+    for (let start = 0; start < rows.length; start += MAX_수령 지갑_PER_TX) {
+      const batch = rows.slice(start, start + MAX_수령 지갑_PER_TX);
       const tx = new web3.Transaction();
       const latest = await connection.getLatestBlockhash("confirmed");
       tx.recentBlockhash = latest.blockhash;
@@ -254,13 +254,13 @@
           ));
         }
 
-        const rawAmount = parseUiAmount(item.amount, decimals);
+        const raw수량 = parseUi수량(item.amount, decimals);
         tx.add(createTransferCheckedInstruction(
           item.sourceAta,
           mint,
           destinationAta,
           owner,
-          rawAmount,
+          raw수량,
           decimals,
           [],
           TOKEN_PROGRAM_ID
@@ -278,7 +278,7 @@
     const useBatchSign = typeof provider.signAllTransactions === "function" && transactions.length > 1;
 
     if (useBatchSign) {
-      setStatus("Review the distribution transactions in Phantom and approve them...", "active");
+      setStatus("Phantom에서 전송 내용을 확인하고 승인해주세요...", "active");
       const signed = await provider.signAllTransactions(transactions);
       for (const tx of signed) {
         const signature = await connection.sendRawTransaction(tx.serialize(), {skipPreflight:false, maxRetries:3});
@@ -286,7 +286,7 @@
       }
     } else {
       for (let i = 0; i < transactions.length; i++) {
-        setStatus(`Approve transaction ${i + 1} of ${transactions.length} in Phantom...`, "active");
+        setStatus(`Phantom에서 ${transactions.length}개 중 ${i + 1}번째 거래를 승인해주세요...`, "active");
         const signed = await provider.signTransaction(transactions[i]);
         const signature = await connection.sendRawTransaction(signed.serialize(), {skipPreflight:false, maxRetries:3});
         signatures.push(signature);
@@ -294,7 +294,7 @@
     }
 
     for (let i = 0; i < signatures.length; i++) {
-      setStatus(`Confirming transaction ${i + 1} of ${signatures.length}...`, "active");
+      setStatus(`${signatures.length}개 중 ${i + 1}번째 거래를 확인하는 중...`, "active");
       await connection.confirmTransaction(signatures[i], "confirmed");
     }
     return signatures;
@@ -302,7 +302,7 @@
 
   async function distribute() {
     const web3 = window.solanaWeb3;
-    if (!web3) throw new Error("Solana Web3 library is not available.");
+    if (!web3) throw new Error("Solana Web3 라이브러리를 불러올 수 없습니다.");
 
     const provider = getProvider();
     if (!provider?.publicKey) {
@@ -330,9 +330,9 @@
     if (!rawRows.length) throw new Error("수령자를 한 명 이상 추가해주세요.");
 
     const rows = rawRows.map((row, index) => {
-      if (!row.address) throw new Error(`Recipient ${index + 1}: enter a wallet address.`);
-      try { new web3.PublicKey(row.address); } catch { throw new Error(`Recipient ${index + 1}: invalid Solana wallet address.`); }
-      if (!row.amount || Number(row.amount) <= 0) throw new Error(`Recipient ${index + 1}: enter an amount greater than zero.`);
+      if (!row.address) throw new Error(`수령 지갑 ${index + 1}: 지갑 주소를 입력해주세요.`);
+      try { new web3.PublicKey(row.address); } catch { throw new Error(`수령 지갑 ${index + 1}: 올바른 솔라나 지갑 주소가 아닙니다.`); }
+      if (!row.amount || Number(row.amount) <= 0) throw new Error(`수령 지갑 ${index + 1}: 0보다 큰 수량을 입력해주세요.`);
       return row;
     });
 
@@ -345,17 +345,17 @@
     const transactions = await buildTransactions(connection, provider, mint, prepared, decimals);
     updateSummary(transactions.length);
 
-    setStatus(`Ready: ${rows.length} recipient(s) in ${transactions.length} transaction(s).`, "active");
+    setStatus(`준비 완료: ${transactions.length}개 트랜잭션으로 ${rows.length}개 지갑에 전송합니다.`, "active");
     const signatures = await sendTransactions(connection, provider, transactions);
 
     const results = document.getElementById("distributeResults");
     if (results) {
       results.innerHTML = signatures.map((signature, index) =>
-        `<div class="distribute-result"><strong>TRANSACTION ${index + 1} CONFIRMED</strong><a href="https://solscan.io/tx/${encodeURIComponent(signature)}" target="_blank" rel="noopener noreferrer">VIEW ON SOLSCAN ↗</a></div>`
+        `<div class="distribute-result"><strong>거래 ${index + 1} 확인 완료</strong><a href="https://solscan.io/tx/${encodeURIComponent(signature)}" target="_blank" rel="noopener noreferrer">SOLSCAN에서 보기 ↗</a></div>`
       ).join("");
     }
 
-    setStatus(`배포 완료 — ${rows.length} recipient(s) confirmed on 토큰을 거래하세요.`, "success");
+    setStatus(`배포 완료 — ${rows.length}개 지갑으로 전송이 확인되었습니다.`, "success");
     return signatures;
   }
 
