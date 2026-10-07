@@ -9,7 +9,7 @@
   ];
   const SPL_CDN = "https://esm.sh/@solana/spl-token@0.4.14?bundle";
   const BUFFER_CDN = "https://esm.sh/buffer@6.0.3?bundle";
-  const MAX_수령 지갑_PER_TX = 5;
+  const MAX_RECIPIENTS_PER_TX = 5;
   const GURUG_FEE_WALLET = "ARmME4KE6oe87TokQf7SmYZL6e5Gpz1UCobU3EEqSwEH";
   const GURUG_AIRDROP_FEE_PER_WALLET_LAMPORTS = 1000000; // 0.001 SOL
 
@@ -310,7 +310,7 @@
     const mintInfo = await readMint(connection, mint, provider.publicKey, spl);
     const amountRaw = uiAmountToRaw(amountText, mintInfo.decimals);
 
-    if (amountRaw <= 0n) throw new Error("Token 수량은 0보다 커야 합니다.");
+    if (amountRaw <= 0n) throw new Error("토큰 수량은 0보다 커야 합니다.");
 
     const validated = validateRows(web3, amountRaw);
     const totalRaw = amountRaw * BigInt(validated.length);
@@ -322,8 +322,8 @@
     }
 
     const batches = [];
-    for (let i = 0; i < validated.length; i += MAX_수령 지갑_PER_TX) {
-      batches.push(validated.slice(i, i + MAX_수령 지갑_PER_TX));
+    for (let i = 0; i < validated.length; i += MAX_RECIPIENTS_PER_TX) {
+      batches.push(validated.slice(i, i + MAX_RECIPIENTS_PER_TX));
     }
 
     updateSummary(batches.length, mintInfo.decimals);
