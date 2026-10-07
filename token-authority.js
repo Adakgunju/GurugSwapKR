@@ -40,16 +40,16 @@
             <span id="mintAuthorityState" class="authority-state">확인 전</span>
           </div>
           <div class="authority-current">
-            <small>CURRENT AUTHORITY</small>
+            <small>현재 권한</small>
             <code id="mintAuthorityAddress">—</code>
           </div>
           <label class="authority-new">
-            <small>NEW AUTHORITY WALLET</small>
+            <small>새 권한 지갑</small>
             <input id="mintAuthorityNew" type="text" inputmode="text" autocomplete="off" placeholder="지갑 주소 입력">
           </label>
           <div class="authority-actions">
             <button id="mintAuthorityChange" class="authority-change" type="button" disabled>권한 변경</button>
-            <button id="mintAuthorityRevoke" class="authority-revoke" type="button" disabled>REVOKE PERMANENTLY</button>
+            <button id="mintAuthorityRevoke" class="authority-revoke" type="button" disabled>영구 해제</button>
           </div>
         </article>
 
@@ -78,7 +78,7 @@
 
       <div id="authorityStatus" class="token-authority-status">
         <div class="token-authority-status-top"><span class="token-authority-dot"></span><span id="authorityStatusLabel">준비 완료</span></div>
-        <div id="authorityStatusMessage">Enter a token mint address을(를) inspect its current 권한을 관리하세요.</div>
+        <div id="authorityStatusMessage">토큰 민트 주소를 입력하고 현재 권한을 확인하세요.</div>
         <a id="authorityTxLink" href="#" target="_blank" rel="noopener noreferrer" hidden>거래 내역 보기 ↗</a>
       </div>
 
@@ -96,11 +96,11 @@
         <h3 id="authorityModalTitle">권한을 영구 해제하시겠습니까?</h3>
         <p id="authorityModalMessage">This action cannot be undone. The authority will be set을(를) NONE on-chain.</p>
         <label id="authorityModalConfirmWrap" hidden>
-          <small>TYPE REVOKE TO CONFIRM</small>
+          <small>확인을 위해 REVOKE 입력</small>
           <input id="authorityModalConfirm" type="text" autocomplete="off" placeholder="해제">
         </label>
         <div class="authority-modal-actions">
-          <button id="authorityModalCancel" type="button">CANCEL</button>
+          <button id="authorityModalCancel" type="button">취소</button>
           <button id="authorityModalConfirmButton" class="authority-revoke" type="button">영구 해제</button>
         </div>
       </div>
@@ -285,7 +285,7 @@
     const authority = mintState[type + "Authority"] || null;
     row.address.textContent = authority ? short(authority) : "없음 — 영구 해제됨";
     row.address.title = authority || "";
-    row.state.textContent = authority ? "ACTIVE" : "REVOKED";
+    row.state.textContent = authority ? "활성" : "해제됨";
     row.state.className = "authority-state " + (authority ? "active" : "revoked");
 
     const canManage = Boolean(authority && walletMatches(authority));
@@ -301,7 +301,7 @@
     updateRow("freeze");
     const wallet = provider()?.publicKey?.toString();
     document.getElementById("authorityWalletNote").textContent = wallet
-      ? "Connected wallet: " + short(wallet) + ". Only the current authority wallet can make changes."
+      ? "" + short(wallet) + " 연결됨. 현재 권한 지갑만 변경할 수 있습니다."
       : "권한을 변경하거나 해제하려면 우측 상단에서 지갑을 연결해주세요.";
   }
 
@@ -335,15 +335,15 @@
     modalConfirm.value = "";
 
     if (mode === "revoke") {
-      modalTitle.textContent = "label + "을(를) 영구 해제하시겠습니까?"";
+      modalTitle.textContent = label + "을(를) 영구 해제하시겠습니까?";
       modalMessage.textContent = "이 작업은 되돌릴 수 없습니다. " + label + "은 온체인에서 NONE으로 설정되며 다시 복구할 수 없습니다.";
       modalConfirmWrap.hidden = false;
       modalConfirmButton.className = "authority-revoke";
       modalConfirmButton.textContent = "영구 해제";
       modalConfirmButton.dataset.mode = "revoke";
     } else {
-      modalTitle.textContent = "label + " 변경"";
-      modalMessage.textContent = "현재 권한 " + short(current) + "을(를) " + short(newAuthority) + "?";
+      modalTitle.textContent = label + " 변경";
+      modalMessage.textContent = "현재 권한 " + short(current) + "을(를) " + short(newAuthority) + "(으)로 변경하시겠습니까?";
       modalConfirmWrap.hidden = true;
       modalConfirmButton.className = "";
       modalConfirmButton.textContent = "권한 변경";
