@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <title>GURUG 스왑 — SOL ↔ GURUG | 한국어</title>
+  <meta name="description" content="솔라나 기반 GURUG 생태계의 토큰 생성 및 거래 플랫폼.">
+  <link rel="stylesheet" href="style.css?v=58">
+  <script src="https://unpkg.com/@solana/web3.js@1.95.8/lib/index.iife.min.js"></script>
+
+<style>
+.ko-lang-switch{position:fixed;top:96px;right:28px;z-index:50;display:flex;gap:8px;align-items:center;font-size:11px;letter-spacing:.12em;font-weight:800}.ko-lang-switch a{color:#ffe500;text-decoration:none}.ko-lang-switch span{color:#fff;opacity:.65}@media(max-width:850px){.ko-lang-switch{top:82px;right:18px}}
+</style>
+</head>
+<body>
+  <div class="site-glow"></div><div class="gurug-rain" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <header class="topbar">
+    <a class="brand" href="./"><img class="brand-logo" src="https://raw.githubusercontent.com/Adakgunju/Gurug/main/assets/logo/gurug-logo2.png" alt="Gurug"><span>GURUG<span class="accent">스왑</span></span></a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="#create-token">토큰 생성</a>
+      <a href="#distributeTokens">토큰 배포</a>
+      <a href="#liquidity">유동성 풀</a>
+      <a href="#swap">토큰 스왑</a>
+      <a href="#multi-airdrop">멀티 에어드롭</a>
+      <a href="#token-burn">토큰 소각</a>
+      <a href="#token-mint" onclick="document.getElementById('token-mint')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;">토큰 민트</a>
+      <a href="#authority-manager" onclick="document.getElementById('authority-manager')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;">토큰 권한 관리</a>
+      <a href="#links">구루그 네트워크</a>
+    </nav>
+    <div class="top-actions">
+      <div class="market-ticker" aria-label="GURUG market price"><span class="ticker-label">GURUG</span><strong id="gurugPrice">—</strong><span id="gurugChange" class="ticker-change">—</span></div>
+      <button class="wallet-btn top-wallet" id="connectWallet" type="button">지갑 연결</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">메뉴</button>
+    </div>
+  </header>
+  <div class="ko-lang-switch"><a href="https://gurugswap.com/">English</a><span>한국어</span></div>
+  <div id="mobileMenu" class="mobile-menu" hidden>
+    <a href="#create-token">토큰 생성</a>
+    <a href="#distributeTokens">토큰 배포</a>
+    <a href="#liquidity">유동성 풀</a>
+    <a href="#swap">토큰 스왑</a>
+    <a href="#multi-airdrop">멀티 에어드롭</a>
+    <a href="#token-burn">토큰 소각</a>
+    <a href="#token-mint" onclick="document.getElementById('token-mint')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;">토큰 민트</a>
+    <a href="#authority-manager" onclick="document.getElementById('authority-manager')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;">토큰 권한 관리</a>
+    <a href="#links">구루그 네트워크</a>
+  </div>
+  <script>
+    // EARLY NAVIGATION GUARD
+    // Keep core navigation independent from feature scripts.
+    (() => {
+      const menuButton = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", () => {
+          const open = mobileMenu.hidden;
+          mobileMenu.hidden = !open;
+          menuButton.setAttribute("aria-expanded", String(open));
+          menuButton.textContent = open ? "닫기" : "메뉴";
+        });
+      }
+
+      document.addEventListener("click", event => {
+        const link = event.target.closest(".workspace-nav, .desktop-nav a, #mobileMenu a");
+        if (!link) return;
+
+        const href = link.getAttribute("href") || "";
+        if (!href.startsWith("#")) return;
+
+        const targetId = href.slice(1);
+        if (!targetId) return;
+
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        event.preventDefault();
+
+        document.querySelectorAll(".workspace-main > section").forEach(section => {
+          const active = section.id === targetId || (targetId === "swap" && section.id === "token-info");
+          section.classList.toggle("single-section-active", section.id === targetId);
+          if (section.id === "token-info") {
+            section.classList.toggle("single-section-companion", targetId === "swap");
+          }
+          section.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+
+        const main = document.querySelector(".workspace-main");
+        if (main) main.classList.add("single-section-view");
+
+        document.querySelectorAll(".workspace-nav, .desktop-nav a, #mobileMenu a").forEach(item => {
+          const active = item.getAttribute("href") === "#" + targetId;
+          item.classList.toggle("active", active);
+          if (active) item.setAttribute("aria-current", "page");
+          else item.removeAttribute("aria-current");
+        });
+
+        history.replaceState(null, "", "#" + targetId);
+
+        if (mobileMenu && !mobileMenu.hidden) {
+          mobileMenu.hidden = true;
+          if (menuButton) {
+            menuButton.setAttribute("aria-expanded", "false");
+            menuButton.textContent = "메뉴";
+          }
+        }
+
+        const topbar = document.querySelector(".topbar");
+        const offset = (topbar?.offsetHeight || 76) + 10;
+        const y = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({top: Math.max(0, y), behavior: "smooth"});
+      });
+    })();
+  </script>
+  <main>
+    <section class="hero platform-header">
+      <div class="hero-copy">
+        <div class="hero-identity">
+          <p class="hero-tagline">SOLANA TOKEN TRADING &amp; CREATION</p>
+          <h1>GURUG<span>스왑</span></h1>
+          <p class="hero-network"><span class="solana-mark" aria-hidden="true"><img src="assets/solana-gold-logo-64.png" alt=""></span><span>BUILT ON <b>SOLANA</b></span></p>
+          <button class="wallet-btn hero-wallet" id="heroConnectWallet" type="button">지갑 연결</button>
+        </div>
+        <div class="platform-note">
+          <span>비수탁형</span><span>솔라나 메인넷</span><span>레이디움 기반</span>
+        </div>
+      </div>
+    </section>
+    <div class="workspace-shell">
+      <aside class="workspace-sidebar" aria-label="Platform menu">
+        <div class="sidebar-head"><span>GURUG</span><strong>플랫폼</strong></div>
+        <a class="workspace-nav" href="#create-token"><span>01</span><b>토큰 생성</b><em>↗</em></a>
+        <a class="workspace-nav" href="#distributeTokens"><span>02</span><b>토큰 배포</b><em>↗</em></a>
+        <a class="workspace-nav" href="#liquidity"><span>03</span><b>유동성 풀</b><em>↗</em></a>
+        <a class="workspace-nav active" href="#swap"><span>04</span><b>토큰 스왑</b><em>↗</em></a>
+        <a class="workspace-nav" href="#multi-airdrop"><span>05</span><b>멀티 에어드롭</b><em>↗</em></a>
+        <a class="workspace-nav" href="#token-burn"><span>06</span><b>토큰 소각</b><em>↗</em></a>
+        <a class="workspace-nav" href="#token-mint" onclick="document.getElementById('token-mint')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;"><span>10</span><b>토큰 민트</b><em>↗</em></a>
+        <a class="workspace-nav" href="#authority-manager" onclick="document.getElementById('authority-manager')?.scrollIntoView({behavior:'smooth',block:'start'}); return false;"><span>09</span><b>토큰 권한 관리</b><em>↗</em></a>
+        <a class="workspace-nav" href="#links"><span>07</span><b>구루그 네트워크</b><em>↗</em></a>
+        <div class="sidebar-foot"><span>SOLANA</span><span>비수탁형</span></div>
+      </aside>
+      <div class="workspace-main">
+    <section id="swap" class="swap-section">
+      <div class="swap-intro-inner">
+        <div class="swap-intro-kicker">04 / 토큰 스왑</div>
+        <h2>솔라나에서 <span class="section-title-accent">토큰을 거래하세요.</span></h2>
+        <p>SOL, GURUG 및 지원되는 솔라나 토큰을 간편하고 투명하게 거래하세요.</p>
+      </div>
+      <div class="swap-layout">
+        <div class="swap-card">
+          <div class="card-head"><span>GURUG 스왑</span><span class="live-dot">● 실시간 라우팅</span></div>
+          <div class="token-box">
+            <div><small id="fromLabel">지불</small><input id="solAmount" class="swap-input" inputmode="decimal" type="number" min="0" step="0.001" placeholder="0.00"><div class="balance-row"><div id="fromBalance" class="token-balance" hidden></div><button id="maxButton" class="max-button" type="button">MAX</button></div></div>
+            <button class="token token-select sol-token" id="fromTokenButton" type="button" aria-haspopup="dialog" aria-controls="tokenPicker"><span class="sol-logo" aria-hidden="true"><i></i><i></i><i></i></span><span id="fromTokenSymbol">SOL</span><b>⌄</b></button>
+          </div>
+          <button class="arrow" id="swapDirection" type="button" aria-label="Swap direction">↓</button>
+          <div class="token-box">
+            <div><small id="toLabel">수령</small><strong id="gurugAmount">0.00</strong><div id="toBalance" class="token-balance" hidden></div></div>
+            <button class="token token-select gurug-token" id="toTokenButton" type="button" aria-haspopup="dialog" aria-controls="tokenPicker"><img id="toTokenIcon" src="https://raw.githubusercontent.com/Adakgunju/Gurug/main/assets/logo/gurug-logo2.png" alt=""><span id="toTokenSymbol">GURUG</span><b>⌄</b></button>
+          </div>
+
+          <div id="tokenPicker" class="token-picker" hidden role="dialog" aria-modal="true" aria-labelledby="tokenPickerTitle">
+            <div class="token-picker-head"><strong id="tokenPickerTitle">토큰 선택</strong><button id="closeTokenPicker" type="button" aria-label="Close">×</button></div>
+            <input id="tokenSearch" class="token-search" type="search" placeholder="토큰 검색 또는 민트 주소 입력" autocomplete="off">
+            <div id="tokenList" class="token-list"></div>
+          </div>
+          <div class="swap-meta"><span>슬리피지</span><select id="slippage"><option value="0.5">0.5%</option><option value="1">1%</option><option value="2">2%</option></select></div>
+          <button class="connect" id="swapButton" type="button">스왑</button>
+          <div id="swapStatus" class="swap-status">
+            <div class="swap-status-top"><span class="swap-status-dot"></span><span id="swapStatusLabel">스왑 준비 완료</span></div>
+            <div class="swap-progress"><span id="swapProgressFill"></span></div>
+            <div id="swapStatusMessage" class="swap-status-message">SOL을 입력하면 실시간 GURUG 견적을 확인할 수 있습니다.</div>
+            <a id="swapTxLink" class="swap-tx-link" href="#" target="_blank" rel="noopener noreferrer" hidden>거래 내역 보기 ↗</a>
+          </div>
+          <div class="card-foot"><span>비수탁형</span><span>솔라나 메인넷</span><span>레이디움</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="token-info" class="token-info-section" aria-label="Token information">
+      <div class="token-info-card">
+        <div class="token-info-head">
+          <span>토큰 정보</span>
+          <span id="tokenInfoStatus" class="token-info-status">실시간 시세</span>
+        </div>
+        <div class="token-info-main">
+          <div id="tokenInfoIdentity" class="token-info-identity">
+            <span class="token-info-icon token-info-placeholder">?</span>
+            <div><strong id="tokenInfoName">GURUG</strong><small id="tokenInfoSymbol">GURUG</small></div>
+          </div>
+          <button id="tokenInfoSwap" class="token-info-swap" type="button">스왑</button>
+        </div>
+        <div class="token-info-contract">
+          <span>컨트랙트</span>
+          <button id="tokenInfoCopy" type="button"><code id="tokenInfoMint">—</code><b id="tokenInfoCopyText">복사</b></button>
+        </div>
+        <div class="token-info-stats">
+          <div><span>가격</span><strong id="tokenInfoPrice">—</strong></div>
+          <div><span>24시간</span><strong id="tokenInfoChange">—</strong></div>
+          <div><span>유동성</span><strong id="tokenInfoLiquidity">—</strong></div>
+          <div><span>24시간 거래량</span><strong id="tokenInfoVolume">—</strong></div>
+        </div>
+        <div class="token-info-foot">
+          <span id="tokenInfoNetwork">SOLANA</span>
+          <a id="tokenInfoChart" href="#" target="_blank" rel="noopener noreferrer">차트 보기 ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="multi-airdrop" class="platform-placeholder-section" aria-label="멀티 airdrop">
+      <div class="platform-placeholder-head">
+        <div class="platform-section-kicker">05 / 멀티 에어드롭</div>
+        <h2>멀티 <span class="section-title-accent">에어드롭.</span></h2>
+        <p>SPL 토큰을 여러 솔라나 지갑으로 한 번에 전송하세요.</p>
+      </div>
+      <div id="multiAirdropApp"></div>
+    </section>
+
+    <section id="links" class="links-section">
+      <div class="links-heading">
+  <div class="platform-section-kicker">06 / 구루그 네트워크</div>
+  <h2>구루그 <span>네트워크.</span></h2>
+  <p>구루그 생태계의 SNS, 아케이드, 마이닝 및 커뮤니티를 만나보세요.</p>
+</div>
+      <div class="link-grid">
+        <a class="link-card" href="https://gurugsol.xyz/" target="_blank" rel="noopener noreferrer"><span>01 / OFFICIAL</span><strong>WEBSITE</strong><em>↗</em></a>
+        <a class="link-card" href="https://dexscreener.com/solana/G8zUWL2mz8DJ16BrfDJPCo7657kJU3Y5NcrGZ6jtpBm5" target="_blank" rel="noopener noreferrer"><span>02 / MARKET</span><strong>CHART</strong><em>↗</em></a>
+        <a class="link-card" href="https://x.com/gurugsol" target="_blank" rel="noopener noreferrer"><span>03 / FOLLOW</span><strong>𝕏 / X</strong><em>↗</em></a>
+        <a class="link-card" href="https://www.facebook.com/gurugsol/" target="_blank" rel="noopener noreferrer"><span>04 / FOLLOW</span><strong>FACEBOOK</strong><em>↗</em></a>
+        <a class="link-card" href="https://t.me/gurugsol" target="_blank" rel="noopener noreferrer"><span>05 / COMMUNITY</span><strong>TELEGRAM</strong><em>↗</em></a>
+        <a class="link-card" href="https://www.dextools.io/app/solana/pair-explorer/88a3L9i5KHddtUEPJ1crt8yp8RJNoWrgb7sSGGoU1qqe" target="_blank" rel="noopener noreferrer"><span>06 / TRACK</span><strong>DEX TOOLS</strong><em>↗</em></a>
+      </div>
+      <div class="universe-feature-grid">
+        <a class="universe-feature" href="https://adakgunju.github.io/Gurug/gellog/" target="_blank" rel="noopener noreferrer">
+          <span>07 / PLAY</span><strong>GURUG ARCADE</strong><p>스페이스 슈터를 플레이하세요.</p><em>↗</em>
+        </a>
+        <a class="universe-feature" href="https://adakgunju.github.io/Gurug/" target="_blank" rel="noopener noreferrer">
+          <span>08 / EXPLORE</span><strong>GURUG MINING</strong><p>구루그 세계로 들어가세요.</p><em>↗</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="token-burn" class="platform-placeholder-section token-burn-section" aria-label="Token burn">
+      <div class="platform-placeholder-head">
+        <div class="platform-section-kicker">08 / 토큰 소각</div>
+        <h2>소각할 <span class="section-title-accent">토큰.</span></h2>
+        <p>SPL 토큰을 솔라나에서 영구적으로 소각합니다.</p>
+      </div>
+      <div id="tokenBurnApp"></div>
+    </section>
+
+    <section id="authority-manager" class="platform-placeholder-section token-authority-section" aria-label="Token authority manager">
+      <div class="platform-placeholder-head">
+        <div class="platform-section-kicker">09 / 토큰 권한 관리</div>
+        <h2>토큰 <span class="section-title-accent">권한을 관리하세요.</span></h2>
+        <p>솔라나 토큰의 민트 권한과 동결 권한을 조회, 변경 또는 영구 해제할 수 있습니다.</p>
+      </div>
+      <div id="tokenAuthorityApp"></div>
+    </section>
+
+    <section id="partner-ads" class="partner-ads">
+      <div class="partner-ads-heading">
+        <div class="platform-section-kicker">07 / PARTNER ADS</div>
+        <h2>파트너 <span>광고.</span></h2>
+        <p>광고를 통해 구루그 생태계를 후원하고 솔라나 커뮤니티에 GurugSwap을 알리세요.</p>
+      </div>
+      <div class="partner-ads-grid">
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 01"><span>01 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 02"><span>02 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 03"><span>03 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 04"><span>04 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 05"><span>05 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+        <a class="partner-ad-card" href="#" aria-label="파트너 advertising slot 06"><span>06 / SPONSOR</span><strong>여기에 광고를</strong><em>↗</em></a>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="about-inner">
+        <div class="big-type-wrap">
+          <div class="about-kicker">08 / ABOUT GURUG</div>
+          <div class="big-type">생각하고.<br>스왑하고.<br><span>구루그.</span></div>
+        </div>
+        <div class="about-copy"><div class="about-line"></div><p>구루그는 조금 수상한 계획과 자신감 넘치는 표정을 가진 밈 캐릭터입니다.</p><p>솔라나 위에서 재미를 위해 만들어진 GurugSwap은 구루그 웹 생태계의 첫 번째 프로젝트입니다.</p><div class="about-meta"><span>체인 <b>SOLANA</b></span><span>자산 <b>$GURUG</b></span><span>무드 <b>진지하지 않음</b></span></div></div>
+      </div>
+    </section>
+      </div>
+    </div>
+  </main>
+  <footer><span>© GURUG</span><span>솔라나 기반</span><span>GURUG스왑 — V1.0</span></footer>
+  <script src="script.js?v=ko1"></script>
+  <script src="create-token-v15.js?v=ko1"></script>
+  <script src="distribute-token.js?v=ko1"></script>
+  <script src="multi-airdrop.js?v=ko1"></script>
+  <script src="liquidity-token.js?v=ko1"></script>
+  <script src="token-burn.js?v=ko1"></script>
+  <script src="token-authority.js?v=ko1"></script>
+  <script src="token-mint.js?v=ko1"></script>
+  <script>
+    // Independent 토큰 정보 bridge.
+    // It follows the visible TO token and updates the card directly,
+    // so it does not depend on script.js function scope or async timing.
+    (() => {
+      const toSymbolEl = document.getElementById("toTokenSymbol");
+      const tokenListEl = document.getElementById("tokenList");
+      if (!toSymbolEl) return;
+
+      let lastSymbol = "";
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      }
+
+      function setTokenIcon(token) {
+        const identity = document.getElementById("tokenInfoIdentity");
+        if (!identity) return;
+
+        let iconHtml = "";
+        if (token.mint === "So11111111111111111111111111111111111111112") {
+          iconHtml = '<span class="token-info-icon sol-logo" aria-hidden="true"><i></i><i></i><i></i></span>';
+        } else if (token.icon) {
+          iconHtml = '<img class="token-info-icon" src="' + token.icon + '" alt="">';
+        } else {
+          iconHtml = '<span class="token-info-icon token-info-placeholder">' +
+            String(token.symbol || "?").slice(0, 1).toUpperCase() + '</span>';
+        }
+
+        identity.innerHTML =
+          iconHtml +
+          '<div><strong>' + (token.name || "솔라나 토큰") +
+          '</strong><small>$' + (token.symbol || "TOKEN") + '</small></div>';
+      }
+
+      async function loadVisibleTokenInfo(force = false) {
+        const symbol = toSymbolEl.textContent.trim();
+        if (!symbol || (!force && symbol === lastSymbol)) return;
+        lastSymbol = symbol;
+
+        try {
+          const GURUG_MINT = "G8zUWL2mz8DJ16BrfDJPCo7657kJU3Y5NcrGZ6jtpBm5";
+          const GURUG_PAIR = "88a3L9i5KHddtUEPJ1crt8yp8RJNoWrgb7sSGGoU1qqe";
+
+          let token;
+          let market;
+
+          if (symbol === "GURUG") {
+            token = {
+              symbol: "GURUG",
+              name: "Gurug",
+              mint: GURUG_MINT,
+              icon: "https://raw.githubusercontent.com/Adakgunju/Gurug/main/assets/logo/gurug-logo2.png"
+            };
+
+            setText("tokenInfoName", token.name);
+            setText("tokenInfoSymbol", "$" + token.symbol);
+            setText("tokenInfoMint", token.mint);
+            setText("tokenInfoNetwork", "SOLANA");
+            setText("tokenInfoStatus", "시세 불러오는 중");
+            setText("tokenInfoPrice", "—");
+            setText("tokenInfoChange", "—");
+            setText("tokenInfoLiquidity", "—");
+            setText("tokenInfoVolume", "—");
+            setTokenIcon(token);
+
+            const swapEl = document.getElementById("tokenInfoSwap");
+            if (swapEl) swapEl.hidden = false;
+
+            const chartEl = document.getElementById("tokenInfoChart");
+            if (chartEl) {
+              chartEl.href = "https://dexscreener.com/solana/" + GURUG_PAIR;
+            }
+
+            const marketRes = await fetch(
+              "https://api.dexscreener.com/latest/dex/pairs/solana/" + GURUG_PAIR,
+              {cache:"no-store"}
+            );
+            market = await marketRes.json();
+          } else {
+            const res = await fetch(
+              "https://lite-api.jup.ag/tokens/v2/search?query=" +
+              encodeURIComponent(symbol),
+              {cache:"no-store"}
+            );
+            if (!res.ok) return;
+
+            const data = await res.json();
+            const wanted = symbol.toLowerCase();
+            const found = Array.isArray(data)
+              ? data.find(t => String(t?.symbol || "").toLowerCase() === wanted) ||
+                data.find(t => String(t?.name || "").toLowerCase() === wanted)
+              : null;
+
+            if (!found?.id) return;
+
+            token = {
+              symbol: found.symbol || symbol,
+              name: found.name || symbol,
+              mint: found.id,
+              icon: found.icon || found.logoURI || ""
+            };
+
+            setText("tokenInfoName", token.name);
+            setText("tokenInfoSymbol", "$" + token.symbol);
+            setText("tokenInfoMint", token.mint);
+            setText("tokenInfoNetwork", "SOLANA");
+            setText("tokenInfoStatus", "시세 불러오는 중");
+            setText("tokenInfoPrice", "—");
+            setText("tokenInfoChange", "—");
+            setText("tokenInfoLiquidity", "—");
+            setText("tokenInfoVolume", "—");
+            setTokenIcon(token);
+
+            const swapEl = document.getElementById("tokenInfoSwap");
+            if (swapEl) swapEl.hidden = false;
+
+            const chartEl = document.getElementById("tokenInfoChart");
+            if (chartEl) {
+              chartEl.href = "https://dexscreener.com/solana/" + encodeURIComponent(token.mint);
+            }
+
+            const marketRes = await fetch(
+              "https://api.dexscreener.com/latest/dex/tokens/" +
+              encodeURIComponent(token.mint),
+              {cache:"no-store"}
+            );
+            market = await marketRes.json();
+          }
+
+          if (toSymbolEl.textContent.trim() !== symbol) return;
+
+          const pairs = Array.isArray(market?.pairs) ? market.pairs : [];
+          const pair = pairs
+            .filter(p => p?.chainId === "solana")
+            .sort((a,b) =>
+              Number(b?.liquidity?.usd || 0) - Number(a?.liquidity?.usd || 0)
+            )[0];
+
+          if (!pair) {
+            setText("tokenInfoStatus", "시세 정보 없음");
+            return;
+          }
+
+          const price = Number(pair.priceUsd);
+          const change = Number(pair.priceChange?.h24);
+          const liquidity = Number(pair.liquidity?.usd);
+          const volume = Number(pair.volume?.h24);
+
+          const formatPrice = value => {
+            if (!Number.isFinite(value)) return "—";
+            if (value >= 1) return "$" + value.toLocaleString("en-US", {maximumFractionDigits:2});
+            if (value >= 0.01) return "$" + value.toLocaleString("en-US", {maximumFractionDigits:4});
+            return "$" + value.toLocaleString("en-US", {maximumFractionDigits:8});
+          };
+
+          const formatCompact = value => {
+            if (!Number.isFinite(value)) return "—";
+            if (value >= 1000000000) return "$" + (value / 1000000000).toFixed(2) + "B";
+            if (value >= 1000000) return "$" + (value / 1000000).toFixed(2) + "M";
+            if (value >= 1000) return "$" + (value / 1000).toFixed(1) + "K";
+            return "$" + value.toFixed(0);
+          };
+
+          setText("tokenInfoPrice", formatPrice(price));
+          setText("tokenInfoChange",
+            Number.isFinite(change)
+              ? (change >= 0 ? "+" : "") + change.toFixed(2) + "%"
+              : "—"
+          );
+          setText("tokenInfoLiquidity", formatCompact(liquidity));
+          setText("tokenInfoVolume", formatCompact(volume));
+          setText("tokenInfoStatus", "실시간 시세");
+
+          const changeEl = document.getElementById("tokenInfoChange");
+          if (changeEl) {
+            changeEl.style.color =
+              Number.isFinite(change) && change < 0 ? "#ff8f8f" : "#ffe500";
+          }
+
+          const chartEl = document.getElementById("tokenInfoChart");
+          if (chartEl) chartEl.href = pair.url || chartEl.href;
+        } catch (err) {
+          console.warn("Independent token-info bridge failed:", err);
+          setText("tokenInfoStatus", "시세 정보를 불러올 수 없습니다.");
+        }
+      }
+
+      loadVisibleTokenInfo(true);
+
+      new MutationObserver(() => loadVisibleTokenInfo(false)).observe(toSymbolEl, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+
+      if (tokenListEl) {
+        tokenListEl.addEventListener("click", () => {
+          setTimeout(() => loadVisibleTokenInfo(true), 0);
+        });
+      }
+    })();
+  </script>
+
+    <style id="single-section-view-styles">
+      /* Platform workspace: show one menu section at a time. Feature scripts and DOM IDs remain unchanged. */
+      .workspace-main.single-section-view{
+        min-height:calc(100vh - 82px)!important;
+        padding-top:40px!important;
+      }
+      .workspace-main.single-section-view > section{
+        display:none!important;
+        margin-top:0!important;
+        margin-bottom:0!important;
+        width:100%!important;
+      }
+      .workspace-main.single-section-view > section.single-section-active{
+        display:block!important;
+      }
+      .workspace-main.single-section-view > #token-info.single-section-companion{
+        display:block!important;
+      }
+      .workspace-main.single-section-view > #swap.single-section-active{
+        margin-bottom:28px!important;
+      }
+      .workspace-main.single-section-view > #token-info.single-section-companion{
+        margin-top:28px!important;
+      }
+      .workspace-main.single-section-view .swap-intro-inner,
+      .workspace-main.single-section-view .platform-placeholder-head,
+      .workspace-main.single-section-view .links-heading,
+      .workspace-main.single-section-view .partner-ads-heading{
+        margin-bottom:28px!important;
+      }
+      @media(max-width:850px){
+        .workspace-main.single-section-view{
+          min-height:calc(100vh - 76px)!important;
+          padding-top:24px!important;
+        }
+        .workspace-main.single-section-view > section.single-section-active{
+          min-height:0!important;
+        }
+        .workspace-main.single-section-view > #token-info.single-section-companion{
+          margin-top:20px!important;
+        }
+      }
+      @media(max-width:520px){
+        .workspace-main.single-section-view{
+          padding-top:18px!important;
+        }
+      }
+    </style>
+
+    <script>
+      // Single-section platform navigation.
+      // Only the selected menu section is visible; all existing feature scripts,
+      // DOM IDs and transaction logic remain untouched.
+      function initSingleSectionView() {
+        const main = document.querySelector(".workspace-main");
+        if (!main) return;
+
+        const menuTargets = [
+          "create-token",
+          "distributeTokens",
+          "liquidity",
+          "swap",
+          "multi-airdrop",
+          "links",
+          "partner-ads",
+          "token-burn",
+          "token-mint",
+          "authority-manager",
+        ];
+
+        const sections = new Map(
+          menuTargets
+            .map(id => [id, document.getElementById(id)])
+            .filter(([, el]) => !!el)
+        );
+
+        function setActiveMenu(targetId, updateHash = true) {
+          if (!sections.has(targetId)) targetId = "swap";
+          main.classList.add("single-section-view");
+
+          sections.forEach((section, id) => {
+            section.classList.toggle("single-section-active", id === targetId);
+            section.setAttribute("aria-hidden", id === targetId ? "false" : "true");
+          });
+
+          // 토큰 정보 belongs to the 토큰 스왑 workspace, but is not a separate menu item.
+          const tokenInfo = document.getElementById("token-info");
+          if (tokenInfo) {
+            const showTokenInfo = targetId === "swap";
+            tokenInfo.classList.toggle("single-section-companion", showTokenInfo);
+            tokenInfo.setAttribute("aria-hidden", showTokenInfo ? "false" : "true");
+          }
+
+          if (updateHash) {
+            const nextHash = "#" + targetId;
+            if (window.location.hash !== nextHash) {
+              history.replaceState(null, "", nextHash);
+            }
+          }
+
+          // Keep the active workspace at the top so mobile users never have to
+          // scroll through unrelated tools before using the selected feature.
+          const topbar = document.querySelector(".topbar");
+          const offset = (topbar?.offsetHeight || 76) + 10;
+          const y = main.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+
+          document.querySelectorAll(".workspace-nav, .desktop-nav a, #mobileMenu a").forEach(link => {
+            const href = link.getAttribute("href");
+            const active = href === "#" + targetId;
+            link.classList.toggle("active", active);
+            if (active) link.setAttribute("aria-current", "page");
+            else link.removeAttribute("aria-current");
+          });
+        }
+
+        function getInitialSection() {
+          const hash = window.location.hash.replace(/^#/, "");
+          return sections.has(hash) ? hash : "swap";
+        }
+
+        // Bind once. Prevent normal anchor scrolling and switch the workspace instead.
+        document.querySelectorAll(".workspace-nav, .desktop-nav a, #mobileMenu a").forEach(link => {
+          const href = link.getAttribute("href") || "";
+          if (!href.startsWith("#")) return;
+          const targetId = href.slice(1);
+          if (!sections.has(targetId)) return;
+
+          link.addEventListener("click", event => {
+            event.preventDefault();
+            setActiveMenu(targetId, true);
+
+            const mobileMenu = document.getElementById("mobileMenu");
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            if (mobileMenu && !mobileMenu.hidden) {
+              mobileMenu.hidden = true;
+              if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute("aria-expanded", "false");
+                mobileMenuBtn.textContent = "메뉴";
+              }
+            }
+          });
+        });
+
+        window.addEventListener("hashchange", () => {
+          setActiveMenu(getInitialSection(), false);
+        });
+
+        setActiveMenu(getInitialSection(), false);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initSingleSectionView, {once:true});
+      } else {
+        initSingleSectionView();
+      }
+    </script>
+</body>
+</html>
