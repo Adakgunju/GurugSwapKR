@@ -3774,3 +3774,197 @@ input:focus,textarea:focus,select:focus{
     font-size:30px!important;
   }
 }
+
+/* =========================================================
+   VISUAL SYSTEM — ICONS, DATA TABLES, CARDS
+   ========================================================= */
+
+/* Sidebar icons */
+.workspace-nav{
+  grid-template-columns:30px 24px 1fr 18px!important;
+  gap:7px!important;
+}
+.workspace-nav .nav-icon{
+  width:30px!important;
+  height:30px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:9px!important;
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.055)!important;
+  color:#8f9689!important;
+}
+.workspace-nav .nav-icon svg{
+  width:16px!important;
+  height:16px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.7!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.workspace-nav.active .nav-icon{
+  color:#ffe500!important;
+  background:rgba(255,229,0,.09)!important;
+  border-color:rgba(255,229,0,.22)!important;
+}
+.workspace-nav b{white-space:nowrap!important}
+
+/* Make the token info stats feel like a real data table */
+.token-info-stats{
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+  gap:0!important;
+  background:#0a0d0a!important;
+}
+.token-info-stats>div{
+  padding:15px 16px!important;
+  border:0!important;
+  border-right:1px solid rgba(255,255,255,.065)!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,#111511,#0c0f0c)!important;
+}
+.token-info-stats>div:last-child{border-right:0!important}
+.token-info-stats span{
+  color:#747b70!important;
+  font-size:8px!important;
+  font-weight:700!important;
+}
+.token-info-stats strong{
+  color:#f2f4ed!important;
+  font-size:14px!important;
+  margin-top:8px!important;
+}
+
+/* Generic data tables used by tool panels */
+.workspace-main table{
+  width:100%!important;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:14px!important;
+  background:#0b0e0b!important;
+  color:#e8ebe3!important;
+}
+.workspace-main thead th{
+  background:#151a14!important;
+  color:#92998d!important;
+  font-size:9px!important;
+  font-weight:800!important;
+  letter-spacing:.10em!important;
+  text-transform:uppercase!important;
+  padding:13px 15px!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+  text-align:left!important;
+}
+.workspace-main tbody td{
+  padding:14px 15px!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  font-size:12px!important;
+  color:#d9ddd4!important;
+  background:#0d100d!important;
+}
+.workspace-main tbody tr:last-child td{border-bottom:0!important}
+.workspace-main tbody tr:hover td{background:#121711!important}
+.workspace-main tbody tr:nth-child(even) td{background:#0f120f!important}
+.workspace-main tbody tr:nth-child(even):hover td{background:#141914!important}
+
+/* Network cards now have actual visual identity */
+.link-grid{grid-template-columns:repeat(3,1fr)!important}
+.link-card{
+  min-height:190px!important;
+  padding:22px!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  background:linear-gradient(145deg,#111511,#0b0e0b)!important;
+  border-radius:18px!important;
+}
+.link-card .link-icon{
+  width:48px!important;
+  height:48px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:14px!important;
+  background:rgba(255,229,0,.08)!important;
+  border:1px solid rgba(255,229,0,.18)!important;
+  color:#ffe500!important;
+  font-size:24px!important;
+  font-weight:800!important;
+}
+.link-card .link-icon svg{
+  width:23px!important;
+  height:23px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.7!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.link-card strong{font-size:25px!important;margin-top:4px!important}
+.link-card.featured{background:linear-gradient(145deg,#ffe500,#e8cf00)!important}
+
+/* Token info header gets a real icon */
+.token-info-head:before{
+  content:"◈";
+  width:26px;
+  height:26px;
+  display:inline-grid;
+  place-items:center;
+  border-radius:8px;
+  background:rgba(255,229,0,.10);
+  border:1px solid rgba(255,229,0,.18);
+  color:#ffe500;
+  margin-right:8px;
+  font-size:13px;
+}
+.token-info-head{
+  justify-content:flex-start!important;
+}
+
+/* Section cards use icon-like kicker pills */
+.create-token-kicker,
+.distribute-kicker,
+.liquidity-kicker,
+.swap-intro-kicker,
+.platform-section-kicker{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:25px!important;
+  padding:0 9px!important;
+  border:1px solid rgba(255,229,0,.16)!important;
+  border-radius:999px!important;
+  background:rgba(255,229,0,.045)!important;
+}
+
+/* Better feature/help steps */
+.create-token-help-step,
+.distribute-help-step,
+.liquidity-help-step{
+  padding:14px 0!important;
+  border-bottom:1px solid rgba(255,255,255,.06)!important;
+}
+.create-token-help-step:last-child,
+.distribute-help-step:last-child,
+.liquidity-help-step:last-child{border-bottom:0!important}
+
+/* More polished status blocks */
+.swap-status,
+.token-authority-status{
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#111511,#0b0e0b)!important;
+}
+.swap-status-top{
+  padding-bottom:8px!important;
+}
+
+/* Mobile table */
+@media(max-width:520px){
+  .workspace-nav{grid-template-columns:30px 22px 1fr 14px!important}
+  .workspace-nav .nav-icon{width:30px!important;height:30px!important}
+  .token-info-stats{grid-template-columns:repeat(2,1fr)!important}
+  .token-info-stats>div:nth-child(2){border-right:0!important}
+  .token-info-stats>div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.065)!important}
+  .link-grid{grid-template-columns:1fr!important}
+  .link-card{min-height:160px!important}
+}
