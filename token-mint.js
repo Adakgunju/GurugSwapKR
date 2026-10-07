@@ -72,7 +72,7 @@
     const authority=document.getElementById("authority-manager");
     if(!authority) return;
     authority.insertAdjacentHTML("beforebegin", `
-      <section id="token-mint" class="platform-placeholder-section" aria-label="Token mint">
+      <section id="token-mint" class="platform-placeholder-section" aria-label="토큰 민트">
         <div class="platform-placeholder-head">
           <div class="platform-section-kicker">10 / 토큰 민트</div>
           <h2>추가 <span class="section-title-accent">토큰을 민트하세요.</span></h2>
@@ -104,12 +104,12 @@
             <button id="tokenMintButton" class="token-mint-button" type="button" disabled>토큰 민트</button>
 
             <div id="tokenMintStatus" class="token-mint-status">
-              <div class="token-mint-status-top"><span class="token-mint-dot"></span><span id="tokenMintStatusLabel">READY</span></div>
+              <div class="token-mint-status-top"><span class="token-mint-dot"></span><span id="tokenMintStatusLabel">준비 완료</span></div>
               <div id="tokenMintStatusMessage">Enter a token mint address to inspect its 민트 권한.</div>
               <a id="tokenMintTx" class="token-mint-tx" href="#" target="_blank" rel="noopener noreferrer" hidden>거래 내역 보기 ↗</a>
             </div>
 
-            <div class="token-mint-foot"><span>비수탁형</span><span>GURUG스왑 FEE: 0.20 SOL</span><span>PHANTOM SIGNATURE</span></div>
+            <div class="token-mint-foot"><span>비수탁형</span><span>GURUG스왑 FEE: 0.20 SOL</span><span>PHANTOM 서명</span></div>
           </div>
         </div>
       </section>
@@ -184,10 +184,10 @@
   async function readMint(mint){
     const result=await rpc("getAccountInfo",[mint,{encoding:"jsonParsed",commitment:"confirmed"}]);
     const value=result?.value;
-    if(!value) throw new Error("Token mint account was not found.");
-    if(value.owner!==TOKEN_PROGRAM&&value.owner!==TOKEN_2022_PROGRAM) throw new Error("This address is not an SPL Token or Token-2022 mint.");
+    if(!value) throw new Error("토큰 민트 account was not found.");
+    if(value.owner!==TOKEN_PROGRAM&&value.owner!==TOKEN_2022_PROGRAM) throw new Error("이 주소는 SPL 토큰 또는 Token-2022 민트가 아닙니다.");
     const info=value.data?.parsed?.info;
-    if(value.data?.parsed?.type!=="mint"||!info) throw new Error("This address is not a valid token mint.");
+    if(value.data?.parsed?.type!=="mint"||!info) throw new Error("올바른 토큰 민트 주소가 아닙니다.");
     return {
       mint,
       programId:value.owner,
@@ -209,15 +209,15 @@
 
   function parseUiAmount(text,decimals){
     const value=String(text||"").trim().replace(/,/g,"");
-    if(!/^\d+(?:\.\d+)?$/.test(value)) throw new Error("Enter a valid amount to mint.");
+    if(!/^\d+(?:\.\d+)?$/.test(value)) throw new Error("올바른 민트 수량을 입력해주세요.");
     const parts=value.split(".");
     const whole=parts[0]||"0";
     const fraction=(parts[1]||"");
-    if(fraction.length>decimals) throw new Error("Amount has more decimal places than this token supports.");
+    if(fraction.length>decimals) throw new Error("수량의 소수점 자릿수가 토큰 설정을 초과했습니다.");
     const padded=fraction.padEnd(decimals,"0");
     const raw=BigInt(whole)*10n**BigInt(decimals)+(padded?BigInt(padded):0n);
     if(raw<=0n) throw new Error("Mint 수량은 0보다 커야 합니다.");
-    if(raw>18446744073709551615n) throw new Error("Mint amount is too large.");
+    if(raw>18446744073709551615n) throw new Error("민트 수량이 너무 큽니다.");
     return raw;
   }
 
@@ -233,7 +233,7 @@
       const text=String(value);
       if(text && text!=="[object Object]") return text;
     }catch{}
-    throw new Error("Connected wallet returned an invalid public key.");
+    throw new Error("연결된 지갑의 공개키가 올바르지 않습니다.");
   }
 
   function walletPublicKey(){
@@ -259,11 +259,11 @@
     }else if(programId===TOKEN_PROGRAM){
       tokenProgramKey=new solanaWeb3.PublicKey(TOKEN_PROGRAM);
     }else{
-      throw new Error("Unknown token program: "+String(programId));
+      throw new Error("알 수 없는 토큰 프로그램: "+String(programId));
     }
     const associatedProgramKey=new solanaWeb3.PublicKey(ASSOCIATED_TOKEN_PROGRAM);
     const seedBytes=[ownerKey.toBytes(),tokenProgramKey.toBytes(),mintKey.toBytes()];
-    if(seedBytes.some(b=>b.length!==32)) throw new Error("ATA seed length error");
+    if(seedBytes.some(b=>b.length!==32)) throw new Error("ATA 시드 길이 오류");
     return solanaWeb3.PublicKey.findProgramAddressSync(seedBytes,associatedProgramKey)[0];
   }
 
@@ -306,7 +306,7 @@
       setStatus("잘못된 민트 주소","올바른 솔라나 민트 주소를 입력해주세요.","error");
       return;
     }
-    setStatus("CHECKING","Reading the mint directly from Solana…","active");
+    setStatus("조회 중","솔라나에서 민트 정보를 직접 조회하는 중…","active");
     let stage="RPC mint lookup";
     try{
       mintState=await readMint(mint);
@@ -323,15 +323,15 @@
       // reported cleanly without attempting any ATA derivation.
       if(!authority){
         check.textContent="민트 권한 해제됨";
-        document.getElementById("tokenMintAccount").textContent=p?.publicKey ? "—" : "Connect wallet";
-        setStatus("민트 비활성화","This token has no 민트 권한. Additional tokens cannot be minted.","error");
+        document.getElementById("tokenMintAccount").textContent=p?.publicKey ? "—" : "지갑 연결";
+        setStatus("민트 권한 없음","이 토큰에는 민트 권한이 없습니다. 추가 토큰을 발행할 수 없습니다.","error");
         return;
       }
 
       if(!p?.publicKey){
         check.textContent="지갑 미연결";
-        document.getElementById("tokenMintAccount").textContent="Connect wallet";
-        setStatus("지갑 연결","This token can be minted, but you must connect the current 민트 권한 wallet first.","");
+        document.getElementById("tokenMintAccount").textContent="지갑 연결";
+        setStatus("지갑 연결","이 토큰은 민트할 수 있지만 먼저 현재 민트 권한 지갑을 연결해야 합니다.","");
         return;
       }
 
@@ -346,14 +346,14 @@
 
       if(!walletAddressValue){
         check.textContent="지갑 미연결";
-        document.getElementById("tokenMintAccount").textContent="Connect wallet";
-        setStatus("지갑 연결","This token can be minted, but you must connect the current 민트 권한 wallet first.","");
+        document.getElementById("tokenMintAccount").textContent="지갑 연결";
+        setStatus("지갑 연결","이 토큰은 민트할 수 있지만 먼저 현재 민트 권한 지갑을 연결해야 합니다.","");
         return;
       }
 
       if(walletAddressValue!==authority){
         check.textContent="다른 지갑에 권한 있음";
-        setStatus("권한 필요","This token has an active 민트 권한, but the connected wallet is not that authority.","");
+        setStatus("권한 필요","이 토큰에는 민트 권한이 있지만 연결된 지갑이 현재 권한 지갑이 아닙니다.","");
         return;
       }
 
@@ -409,7 +409,7 @@
 
     const button=document.getElementById("tokenMintButton");
     button.disabled=true;
-    setStatus("승인 대기 중","Approve the mint + 0.20 SOL GurugSwap service fee in Phantom.","active");
+    setStatus("승인 대기 중","Phantom에서 민트와 0.20 SOL GurugSwap 서비스 수수료를 승인해주세요.","active");
     let txId;
     if(typeof p.signAndSendTransaction==="function"){
       const result=await p.signAndSendTransaction(tx,{skipPreflight:false,maxRetries:3});
@@ -426,7 +426,7 @@
     for(let i=0;i<40;i++){
       const result=await connection.getSignatureStatuses([txId],{searchTransactionHistory:true});
       const sig=result?.value?.[0];
-      if(sig?.err) throw new Error("The mint transaction failed on-chain.");
+      if(sig?.err) throw new Error("온체인 민트 거래가 실패했습니다.");
       if(sig?.confirmationStatus==="confirmed"||sig?.confirmationStatus==="finalized"){
         setStatus("민트 성공","토큰이 연결된 지갑으로 민트되었습니다.","success");
         const link=document.getElementById("tokenMintTx");
@@ -439,7 +439,7 @@
       }
       await new Promise(r=>setTimeout(r,1000));
     }
-    throw new Error("The transaction was sent, but confirmation timed out. Check Solscan before retrying.");
+    throw new Error("거래가 전송되었지만 확인 시간이 초과되었습니다. Solscan에서 거래를 확인해주세요.");
   }
 
   function bind(){
