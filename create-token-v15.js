@@ -26,7 +26,7 @@
         }
       } catch {}
     }
-    throw new Error("No Solana RPC endpoint is currently available. Please try again.");
+    throw new Error("현재 사용할 수 있는 솔라나 RPC가 없습니다. 잠시 후 다시 시도해주세요.");
   }
   const UMI_CDN = "https://esm.sh/@metaplex-foundation/umi@1.5.1?bundle";
   const UMI_DEFAULTS_CDN = "https://esm.sh/@metaplex-foundation/umi-bundle-defaults@1.5.1?bundle";
@@ -287,45 +287,45 @@
     const swap = document.getElementById("swap");
     if (!swap) return;
     swap.insertAdjacentHTML("beforebegin", `
-      <section id="create-token" aria-label="Create a Solana token">
+      <section id="create-token" aria-label="솔라나 토큰 생성">
         <div class="create-token-shell">
           <div class="create-token-head">
             <div class="create-token-kicker">01 / 토큰 생성</div>
-            <h2 class="create-token-title">Create your <span class="section-title-accent">SPL Token.</span></h2>
-            <p class="create-token-copy">Create a new standard SPL Token mint directly from GurugSwap. Your wallet signs the transaction — GurugSwap never receives your private key.</p>
+            <h2 class="create-token-title">나만의 <span class="section-title-accent">SPL 토큰.</span></h2>
+            <p class="create-token-copy">GurugSwap에서 새로운 SPL 토큰을 직접 생성하세요. 거래에는 지갑이 서명하며 GurugSwap은 개인키를 받지 않습니다.</p>
             <span class="create-token-network">솔라나 메인넷</span>
           </div>
           <div class="create-token-card">
           <div class="create-token-grid">
             <div class="create-token-field">
-              <label for="createTokenName">TOKEN NAME</label>
+              <label for="createTokenName">토큰 이름</label>
               <input id="createTokenName" maxlength="32" type="text" placeholder="My Token" autocomplete="off">
-              <small>Up to 32 characters.</small>
+              <small>최대 32자입니다.</small>
             </div>
             <div class="create-token-field">
-              <label for="createTokenSymbol">SYMBOL</label>
+              <label for="createTokenSymbol">심볼</label>
               <input id="createTokenSymbol" maxlength="6" type="text" placeholder="MYTKN" autocomplete="off">
-              <small>Up to 6 characters.</small>
+              <small>최대 6자입니다.</small>
             </div>
             <div class="create-token-field">
-              <label for="createTokenSupply">TOTAL SUPPLY</label>
+              <label for="createTokenSupply">총 발행량</label>
               <input id="createTokenSupply" inputmode="decimal" type="text" placeholder="1000000000" autocomplete="off">
-              <small>Initial supply minted to your wallet.</small>
+              <small>초기 발행량은 지갑으로 전송됩니다.</small>
             </div>
             <div class="create-token-field">
               <label for="createTokenDecimals">소수점</label>
               <input id="createTokenDecimals" inputmode="numeric" type="number" min="0" max="9" step="1" value="9">
-              <small>0–9 decimal places.</small>
+              <small>소수점 0~9자리까지 지원합니다.</small>
             </div>
             <div class="create-token-field full">
-              <label>TOKEN LOGO</label>
+              <label>토큰 로고</label>
               <div class="create-token-logo-wrap">
                 <label class="create-token-logo-upload" for="createTokenLogo">
                   <input id="createTokenLogo" type="file" accept="image/png,image/jpeg,image/webp">
                   <img id="createTokenLogoPreview" class="create-token-logo-preview" alt="Token logo preview">
-                  <span class="create-token-logo-placeholder"><b>UPLOAD LOGO</b>PNG, JPG or WEBP</span>
+                  <span class="create-token-logo-placeholder"><b>로고 업로드</b>PNG, JPG 또는 WEBP</span>
                 </label>
-                <small>Use a square image. Maximum 2 MB. The selected logo is previewed here.</small>
+                <small>정사각형 이미지를 사용하세요. 최대 2MB이며 선택한 로고를 여기에서 미리 볼 수 있습니다.</small>
               </div>
             </div>
           </div>
@@ -334,23 +334,23 @@
             <label class="create-token-check">
               <input id="createTokenFixed" type="checkbox" checked>
               <span>
-                <strong>FIX TOTAL SUPPLY</strong>
-                <span>After the initial supply is minted, permanently revoke 민트 권한. No additional tokens can be minted.</span>
+                <strong>FIX 총 발행량</strong>
+                <span>초기 발행 후 민트 권한을 영구 해제합니다. 추가 토큰을 발행할 수 없습니다.</span>
               </span>
             </label>
             <label class="create-token-check">
               <input id="createTokenRevokeFreeze" type="checkbox" checked>
               <span>
-                <strong>REVOKE FREEZE AUTHORITY</strong>
-                <span>Prevents a freeze authority from freezing token accounts later. Recommended for public liquidity pools.</span>
+                <strong>동결 권한 해제</strong>
+                <span>나중에 동결 권한으로 토큰 계정을 동결할 수 없게 합니다. 공개 유동성 풀에 권장됩니다.</span>
               </span>
             </label>
-            <div class="create-token-warning"><b>Important:</b> this creates a real token on Solana mainnet and requires SOL for Solana account setup and transaction fees. Review everything before approving in Phantom.</div>
+            <div class="create-token-warning"><b>주의:</b> 솔라나 메인넷에 실제 토큰을 생성하며 계정 생성 및 네트워크 수수료에 SOL이 필요합니다. Phantom에서 승인하기 전에 모든 내용을 확인하세요.</div>
           </div>
 
           <div class="create-token-cost">
             <div class="create-token-cost-title">CREATION COST</div>
-            <div class="create-token-cost-row"><span>GurugSwap service fee</span><strong>0.50 SOL</strong></div>
+            <div class="create-token-cost-row"><span>GurugSwap 서비스 수수료</span><strong>0.50 SOL</strong></div>
             <div class="create-token-warning"><b>Service fee:</b> 0.50 SOL is paid to GurugSwap. Solana network and storage transaction fees are separate and paid through your wallet.</div>
           </div>
           <button id="createTokenButton" class="create-token-button" type="button">CREATE TOKEN</button>
@@ -373,16 +373,16 @@
         </div>
         <aside class="create-token-help">
           <div class="create-token-help-kicker">HOW IT WORKS</div>
-          <h3>How to create a Solana token</h3>
-          <div class="create-token-help-step"><div class="create-token-help-num">1</div><div><strong>Connect your wallet</strong><span>Connect Phantom. Your wallet stays under your control.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">2</div><div><strong>Enter token details</strong><span>Choose the name, symbol, supply and decimals.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">3</div><div><strong>Upload your logo</strong><span>Upload PNG, JPG or WEBP and check the preview before creating.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">4</div><div><strong>Choose supply control</strong><span>Fixed Supply and Revoke 동결 권한 are enabled by default.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">5</div><div><strong>Upload metadata</strong><span>Your logo and metadata JSON are stored permanently through Irys. Storage cost is paid by your wallet.</span></div></div>
-          <div class="create-token-help-step"><div class="create-token-help-num">6</div><div><strong>Approve in Phantom</strong><span>Your wallet signs the token creation and metadata transaction.</span></div></div>
-          <div class="create-token-help-section"><h4>What is Fixed Total Supply?</h4><p>Revoking 민트 권한 after the initial mint means no additional tokens can be minted through that authority.</p></div>
-          <div class="create-token-help-section"><h4>What is 동결 권한?</h4><p>A freeze authority can freeze token accounts. Revoking it leaves no freeze authority on the mint.</p><div class="create-token-help-tip">Recommended for public liquidity pools and transparent token launches.</div></div>
-          <div class="create-token-help-section"><h4>What happens after creation?</h4><p>Your wallet receives the initial supply and GurugSwap shows the new mint address with direct Solscan links.</p></div>
+          <h3>솔라나 토큰 만드는 방법</h3>
+          <div class="create-token-help-step"><div class="create-token-help-num">1</div><div><strong>지갑 연결</strong><span>Phantom을 연결하세요. 지갑과 자산은 계속 본인이 직접 관리합니다.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">2</div><div><strong>토큰 정보 입력</strong><span>이름, 심볼, 발행량, 소수점을 설정하세요.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">3</div><div><strong>로고 업로드</strong><span>Upload PNG, JPG 또는 WEBP and check the preview before creating.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">4</div><div><strong>발행량 관리 설정</strong><span>총 발행량 고정과 동결 권한 해제가 기본으로 활성화됩니다.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">5</div><div><strong>메타데이터 업로드</strong><span>로고와 메타데이터 JSON은 Irys를 통해 영구 저장됩니다. 저장 비용은 지갑에서 지불합니다.</span></div></div>
+          <div class="create-token-help-step"><div class="create-token-help-num">6</div><div><strong>Phantom에서 승인</strong><span>지갑에서 토큰 생성 및 메타데이터 거래에 서명합니다.</span></div></div>
+          <div class="create-token-help-section"><h4>총 발행량 고정이란?</h4><p>초기 발행 후 민트 권한을 해제하면 해당 권한으로 추가 토큰을 발행할 수 없습니다.</p></div>
+          <div class="create-token-help-section"><h4>동결 권한이란?</h4><p>동결 권한은 토큰 계정을 동결할 수 있습니다. 이를 해제하면 해당 민트에는 동결 권한이 남지 않습니다.</p><div class="create-token-help-tip">공개 유동성 풀과 투명한 토큰 출시를 위해 권장합니다.</div></div>
+          <div class="create-token-help-section"><h4>생성 후에는 어떻게 되나요?</h4><p>지갑으로 초기 발행량이 전송되고, GurugSwap에서 새로운 민트 주소와 Solscan 링크를 확인할 수 있습니다.</p></div>
         </aside>
         </div>
       </section>
@@ -399,15 +399,15 @@
 
   function parseSupply(value, decimals) {
     const raw = String(value || "").trim().replace(/,/g, "");
-    if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error("Enter a valid total supply.");
+    if (!/^\d+(\.\d+)?$/.test(raw)) throw new Error("올바른 총 발행량을 입력해주세요.");
     const parts = raw.split(".");
     const whole = parts[0] || "0";
     const fraction = parts[1] || "";
-    if (fraction.length > decimals) throw new Error("Supply has more decimal places than the selected decimals.");
+    if (fraction.length > decimals) throw new Error("입력한 발행량의 소수점 자릿수가 설정값보다 많습니다.");
     const padded = (fraction + "0".repeat(decimals)).slice(0, decimals);
     const amount = BigInt(whole) * (10n ** BigInt(decimals)) + BigInt(padded || "0");
     const max = 18446744073709551615n;
-    if (amount <= 0n || amount > max) throw new Error("Total supply is outside the valid SPL Token range.");
+    if (amount <= 0n || amount > max) throw new Error("총 발행량이 유효한 SPL 토큰 범위를 벗어났습니다.");
     return amount;
   }
 
@@ -495,14 +495,14 @@
         logoInput.value = "";
         logoPreview.removeAttribute("src");
         logoPreview.classList.remove("visible");
-        setStatus("Please choose a PNG, JPG or WEBP image.", "error");
+        setStatus("Please choose a PNG, JPG 또는 WEBP image.", "error");
         return;
       }
       if (file.size > 2 * 1024 * 1024) {
         logoInput.value = "";
         logoPreview.removeAttribute("src");
         logoPreview.classList.remove("visible");
-        setStatus("Logo image must be 2 MB or smaller.", "error");
+        setStatus("로고 이미지는 2MB 이하이어야 합니다.", "error");
         return;
       }
       if (logoPreview.dataset.objectUrl) URL.revokeObjectURL(logoPreview.dataset.objectUrl);
@@ -510,7 +510,7 @@
       logoPreview.dataset.objectUrl = objectUrl;
       logoPreview.src = objectUrl;
       logoPreview.classList.add("visible");
-      setStatus("Logo selected. Connect Phantom and create when ready.", "active");
+      setStatus("로고가 선택되었습니다. Phantom을 연결한 후 생성하세요.", "active");
       updateStorageCost(NaN);
     });
   }
@@ -898,12 +898,12 @@
         if (String(detail).toLowerCase().includes("blockhash")) {
           throw new Error("Transaction expired: blockhash is no longer valid.");
         }
-        throw new Error("Transaction failed on-chain.");
+        throw new Error("온체인 거래가 실패했습니다.");
       }
       if (status?.confirmationStatus === "confirmed" || status?.confirmationStatus === "finalized") return;
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    throw new Error("Transaction was sent, but confirmation timed out. Check Solscan.");
+    throw new Error("거래가 전송되었지만 확인 시간이 초과되었습니다. Solscan에서 확인해주세요.");
   }
 
   async function refreshCreationCost() {
@@ -1006,14 +1006,14 @@
     const revokeFreeze = !!document.getElementById("createTokenRevokeFreeze")?.checked;
 
     if (!name) throw new Error("Enter a token name.");
-    if (name.length > 32) throw new Error("Token name must be 32 characters or fewer.");
-    if (!/^[A-Z0-9]{1,6}$/.test(symbol)) throw new Error("Symbol must be 1–6 letters or numbers.");
-    if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) throw new Error("Decimals must be between 0 and 9.");
+    if (name.length > 32) throw new Error("토큰 이름은 32자 이하여야 합니다.");
+    if (!/^[A-Z0-9]{1,6}$/.test(symbol)) throw new Error("심볼은 영문 대문자와 숫자를 1~6자까지 사용할 수 있습니다.");
+    if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) throw new Error("소수점은 0~9 사이여야 합니다.");
     const amount = parseSupply(supplyText, decimals);
 
-    if (!logoFile) throw new Error("Upload a token logo before creating the token.");
-    if (!/^image\/(png|jpeg|webp)$/.test(logoFile.type)) throw new Error("Please choose a PNG, JPG or WEBP image.");
-    if (logoFile.size > 2 * 1024 * 1024) throw new Error("Logo image must be 2 MB or smaller.");
+    if (!logoFile) throw new Error("토큰을 생성하기 전에 로고를 업로드해주세요.");
+    if (!/^image\/(png|jpeg|webp)$/.test(logoFile.type)) throw new Error("Please choose a PNG, JPG 또는 WEBP image.");
+    if (logoFile.size > 2 * 1024 * 1024) throw new Error("로고 이미지는 2MB 이하이어야 합니다.");
 
     const provider = typeof getPhantomProvider === "function" ? getPhantomProvider() : null;
     if (!provider?.publicKey) {
@@ -1022,9 +1022,9 @@
       return;
     }
 
-    if (!window.solanaWeb3) throw new Error("Solana Web3 library is not available.");
+    if (!window.solanaWeb3) throw new Error("Solana Web3 라이브러리를 불러올 수 없습니다.");
 
-    setStatus("STEP 1/4 — Preparing permanent metadata storage...", "active");
+    setStatus("1/4단계 — 영구 메타데이터 저장을 준비하는 중...", "active");
     const {umi, modules} = await createUmiForWallet(provider);
     const {createGenericFile, generateSigner, percentAmount, some, publicKey, sol} = modules.umi;
     const {createV1, TokenStandard} = modules.metadata;
@@ -1045,7 +1045,7 @@
     });
 
     const irys = await createIrysWebClient(provider);
-    setStatus("STEP 1/4 — Uploading logo to permanent storage...", "active");
+    setStatus("1/4단계 — 로고를 영구 저장소에 업로드하는 중...", "active");
 
     const imageData = new Uint8Array(await logoFile.arrayBuffer());
     const imageUpload = await uploadToPermanentStorage(
@@ -1069,7 +1069,7 @@
       }
     };
 
-    setStatus("STEP 2/4 — Uploading token metadata JSON...", "active");
+    setStatus("2/4단계 — 토큰 메타데이터 JSON을 업로드하는 중...", "active");
     const metadataUpload = await uploadToPermanentStorage(
       irys,
       provider,
@@ -1082,7 +1082,7 @@
       BigInt(imageUpload.atomicCost) + BigInt(metadataUpload.atomicCost);
     updateStorageCost(Number(totalStorageAtomic) / 1e9);
 
-    setStatus("STEP 3/4 — Building the token creation transaction...", "active");
+    setStatus("3/4단계 — 토큰 생성 거래를 준비하는 중...", "active");
 
     const tokenBuilder = createMint(umi, {
       mint,
@@ -1135,7 +1135,7 @@
         )
       : tokenBuilder;
 
-    setStatus("STEP 3/4 — Approve the actual token creation transaction in Phantom...", "active");
+    setStatus("3/4단계 — Phantom에서 실제 토큰 생성 거래를 승인해주세요...", "active");
     let result;
     let lastError = null;
 
@@ -1184,7 +1184,7 @@
     if (lastError) {
       // sendAndConfirm can time out even after Solana has accepted the transaction.
       // Never show a failure until the mint and expected ATA balance have been checked on-chain.
-      setStatus("STEP 4/4 — Checking the Solana blockchain for your token...", "active");
+      setStatus("4/4단계 — 솔라나 블록체인에서 토큰을 확인하는 중...", "active");
       const recovered = await recoverCreatedTokenIfPresent(mintAddress, ataAddress, amount);
 
       if (!recovered) {
@@ -1195,7 +1195,7 @@
       console.warn("토큰 생성 recovered from client-side confirmation error:", lastError);
     }
 
-    setStatus("STEP 4/4 — Verifying the token mint and initial balance on 토큰을 거래하세요...", "active");
+    setStatus("4/4단계 — 토큰 민트와 초기 잔액을 확인하는 중...", "active");
     await verifyCreatedToken(mintAddress, ataAddress, amount);
 
     const solscan = "https://solscan.io/token/" + mintAddress;
@@ -1217,7 +1217,7 @@
     if (resultEl) resultEl.hidden = false;
 
     updateStorageCost(storageSol > 0 ? storageSol : NaN);
-    setStatus("TOKEN CREATED SUCCESSFULLY — token, metadata, logo and initial balance are verified on 토큰을 거래하세요.", "success");
+    setStatus("토큰 생성 완료 — 토큰, 메타데이터, 로고 및 초기 잔액이 확인되었습니다.", "success");
     window.dispatchEvent(new CustomEvent("gurug:token-created", { detail: { mintAddress, metadataUri, signature: result?.signature || null } }));
     return {mintAddress, metadataUri, signature: result?.signature || null};
   }
