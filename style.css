@@ -3475,3 +3475,302 @@ h1,h2,.big-type,.link-card strong,.universe-feature strong{font-family:'Noto San
 .platform-section-kicker,.section-label,.eyebrow,.multi-airdrop-label,.multi-airdrop-help h3,.multi-airdrop-help-step strong{font-family:'Noto Sans KR','Space Grotesk',system-ui,sans-serif}
 .multi-airdrop-help h3{letter-spacing:-.04em}
 .multi-airdrop-help-step strong{letter-spacing:-.02em}
+
+/* =========================================================
+   GURUGSWAP KR — MODERN WEB3 DASHBOARD REFRESH
+   ========================================================= */
+:root{
+  --bg:#080a08;
+  --surface:#0e110e;
+  --surface-2:#121611;
+  --surface-3:#171b15;
+  --border:rgba(255,255,255,.08);
+  --border-hover:rgba(255,229,0,.22);
+  --yellow:#ffe500;
+  --text:#f4f5ef;
+  --text-2:#c5c8bd;
+  --text-3:#858a7f;
+}
+
+/* Remove the retro decorative noise */
+body{background:var(--bg)!important;color:var(--text)!important}
+body:before{display:none!important}
+.site-glow{
+  background:
+    radial-gradient(circle at 72% 12%,rgba(255,229,0,.055),transparent 25%),
+    radial-gradient(circle at 8% 55%,rgba(92,120,70,.035),transparent 28%)!important;
+}
+.gurug-rain{display:none!important}
+
+/* Clean fixed header */
+.topbar{
+  height:72px!important;
+  padding:0 28px!important;
+  background:rgba(8,10,8,.88)!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.07)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(18px)!important;
+}
+.topbar .brand{min-width:auto!important;font-size:17px!important;letter-spacing:-.045em!important}
+.topbar .brand-logo{width:32px!important;height:32px!important}
+.desktop-nav{
+  position:static!important;
+  transform:none!important;
+  height:100%!important;
+  margin-left:auto!important;
+  margin-right:22px!important;
+  gap:2px!important;
+}
+.desktop-nav a{
+  height:100%!important;
+  padding:0 13px!important;
+  border:0!important;
+  color:#9da196!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  letter-spacing:.08em!important;
+}
+.desktop-nav a:last-child{border:0!important}
+.desktop-nav a:hover{background:transparent!important;color:var(--text)!important}
+.desktop-nav a:after{display:none!important}
+.top-actions{gap:9px!important}
+.wallet-btn{
+  min-width:108px!important;
+  min-height:38px!important;
+  padding:9px 15px!important;
+  border-radius:999px!important;
+  font-size:10px!important;
+}
+
+/* Remove redundant giant banner */
+.platform-header.hero{
+  height:104px!important;
+  min-height:104px!important;
+  margin:14px 22px 0!important;
+  padding:0 28px!important;
+  border:1px solid var(--border)!important;
+  border-radius:16px!important;
+  background:linear-gradient(110deg,#0d110d,#0a0c0a)!important;
+  box-shadow:none!important;
+}
+.platform-header .hero-identity{
+  grid-template-columns:auto 1fr!important;
+  gap:18px!important;
+}
+.platform-header .hero-tagline{font-size:8px!important;letter-spacing:.16em!important;color:#777d72!important}
+.platform-header h1{
+  font-size:34px!important;
+  line-height:1!important;
+  letter-spacing:-.065em!important;
+}
+.platform-header .hero-network{display:none!important}
+
+/* Workspace becomes clean and airy */
+.workspace-shell{
+  grid-template-columns:210px minmax(0,1fr)!important;
+  gap:30px!important;
+  margin:24px 32px 0!important;
+}
+.workspace-sidebar{
+  border:1px solid var(--border)!important;
+  border-radius:16px!important;
+  background:rgba(13,16,13,.82)!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+.sidebar-head{
+  height:62px!important;
+  padding:0 18px!important;
+  border-bottom:1px solid var(--border)!important;
+  font-size:10px!important;
+}
+.workspace-nav{
+  height:49px!important;
+  padding:0 14px!important;
+  grid-template-columns:24px 1fr 14px!important;
+  border-bottom:1px solid rgba(255,255,255,.045)!important;
+  color:#9da196!important;
+}
+.workspace-nav b{
+  font-size:10px!important;
+  letter-spacing:.045em!important;
+  font-weight:700!important;
+}
+.workspace-nav span{font-size:8px!important;color:#666d63!important}
+.workspace-nav em{font-size:11px!important;color:#5e655b!important}
+.workspace-nav:hover{background:rgba(255,255,255,.025)!important}
+.workspace-nav.active{
+  background:rgba(255,229,0,.055)!important;
+  box-shadow:inset 2px 0 0 var(--yellow)!important;
+}
+.sidebar-foot{padding:12px 16px!important}
+
+/* Content width and rhythm */
+@media(min-width:851px){
+  .workspace-main,
+  .workspace-main>section,
+  .workspace-main>#create-token,
+  .workspace-main>#distributeTokens,
+  .workspace-main>#liquidity,
+  .workspace-main>.swap-intro{
+    width:100%!important;
+    max-width:1120px!important;
+  }
+}
+.workspace-main{padding-bottom:60px!important}
+
+/* Section headings: modern, not poster-like */
+.workspace-main>#create-token,
+.workspace-main>#distributeTokens,
+.workspace-main>#liquidity,
+.workspace-main>.swap-intro,
+.workspace-main>.links-section{
+  padding-top:18px!important;
+}
+.create-token-kicker,
+.distribute-kicker,
+.liquidity-kicker,
+.swap-intro-kicker,
+.platform-section-kicker{
+  font-size:9px!important;
+  letter-spacing:.15em!important;
+  margin-bottom:9px!important;
+  color:var(--yellow)!important;
+}
+.create-token-title,
+.distribute-title,
+.liquidity-title,
+.swap-intro h2,
+.links-heading h2{
+  font-size:42px!important;
+  line-height:1.05!important;
+  letter-spacing:-.055em!important;
+  margin:0 0 13px!important;
+  font-weight:850!important;
+}
+.create-token-copy,
+.distribute-lead,
+.liquidity-sub{
+  max-width:680px!important;
+  color:var(--text-2)!important;
+  font-size:14px!important;
+  line-height:1.7!important;
+  margin-top:0!important;
+}
+
+/* Functional cards — one clean level */
+.create-token-card,
+.distribute-card,
+.distribute-help,
+.liquidity-card,
+.liquidity-help,
+.swap-card,
+.token-authority-card,
+.token-burn-card,
+.token-mint-card{
+  border:1px solid var(--border)!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(20,24,19,.96),rgba(12,15,12,.96))!important;
+  box-shadow:0 20px 60px rgba(0,0,0,.24)!important;
+}
+.create-token-card,
+.distribute-card,
+.distribute-help,
+.liquidity-card,
+.liquidity-help{box-shadow:0 14px 45px rgba(0,0,0,.2)!important}
+
+/* Inputs */
+input,textarea,select{
+  background:#090c09!important;
+  border-color:rgba(255,255,255,.11)!important;
+  color:var(--text)!important;
+  border-radius:11px!important;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(255,229,0,.42)!important;
+  box-shadow:0 0 0 3px rgba(255,229,0,.055)!important;
+  outline:none!important;
+}
+
+/* Buttons */
+.connect,.primary-btn,.wallet-btn{
+  box-shadow:none!important;
+}
+.connect:hover,.primary-btn:hover,.wallet-btn:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 8px 25px rgba(255,229,0,.12)!important;
+}
+
+/* Right-side instruction cards */
+.create-token-help,
+.distribute-help,
+.liquidity-help,
+.multi-airdrop-help{
+  border-color:var(--border)!important;
+  background:rgba(14,17,14,.88)!important;
+  border-radius:18px!important;
+}
+
+/* Kill old double-frame effects */
+.create-token-card:before,
+.distribute-card:before,
+.swap-card:before{display:none!important}
+
+/* Keep headings and cards visually separated */
+.create-token-head,
+.liquidity-heading{margin-bottom:24px!important}
+
+/* Authority manager */
+.token-authority-card{
+  padding:24px!important;
+}
+.token-authority-head{
+  border-bottom:1px solid var(--border)!important;
+  padding-bottom:16px!important;
+  margin-bottom:20px!important;
+}
+.authority-row{
+  background:#0b0e0b!important;
+  border:1px solid var(--border)!important;
+  border-radius:14px!important;
+}
+
+/* Hide decorative Solana/rain elements in dashboard */
+.workspace-main .gurug-rain,
+.workspace-main .site-glow{display:none!important}
+
+/* Mobile */
+@media(max-width:850px){
+  .topbar{height:68px!important;padding:0 16px!important}
+  .platform-header.hero{
+    height:auto!important;
+    min-height:92px!important;
+    margin:12px!important;
+    padding:20px!important;
+  }
+  .platform-header h1{font-size:30px!important}
+  .workspace-shell{margin:16px!important;display:block!important}
+  .workspace-main{width:100%!important}
+  .create-token-title,
+  .distribute-title,
+  .liquidity-title,
+  .swap-intro h2,
+  .links-heading h2{
+    font-size:34px!important;
+  }
+}
+@media(max-width:520px){
+  .topbar{height:64px!important}
+  .platform-header.hero{margin:10px!important;min-height:84px!important;padding:18px!important}
+  .platform-header h1{font-size:27px!important}
+  .workspace-shell{margin:12px!important}
+  .create-token-title,
+  .distribute-title,
+  .liquidity-title,
+  .swap-intro h2,
+  .links-heading h2{
+    font-size:30px!important;
+  }
+}
