@@ -3968,13 +3968,3 @@ input:focus,textarea:focus,select:focus{
   .link-grid{grid-template-columns:1fr!important}
   .link-card{min-height:160px!important}
 }
-
-
-/* Tighten only the mobile subtitle/kicker-to-title gap. */
-@media(max-width:850px){
-  .workspace-main.single-section-view .platform-section-kicker,
-  .workspace-main.single-section-view .swap-intro-kicker,
-  .workspace-main.single-section-view .about-kicker{
-    margin-bottom:6px!important;
-  }
-}
